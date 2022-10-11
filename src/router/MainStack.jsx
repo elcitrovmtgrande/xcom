@@ -7,9 +7,17 @@ const Stack = createStackNavigator();
 
 function MainStack() {
   return (
-    <Stack.Navigator initialRouteName="InApp">
-      <Stack.Screen name="Welcome" component={Welcome} />
-      <Stack.Screen name="InApp" component={BottomTabs} />
+    <Stack.Navigator initialRouteName="Welcome">
+      <Stack.Screen
+        name="Welcome"
+        component={Welcome}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="InApp"
+        component={BottomTabs}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }

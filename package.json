@@ -10,18 +10,28 @@
     "dev": "npm run ios"
   },
   "dependencies": {
+    "@expo/vector-icons": "^13.0.0",
+    "@polkadot/keyring": "^10.1.10",
+    "@polkadot/util": "^10.1.10",
+    "@polkadot/util-crypto": "^10.1.10",
     "@react-native-masked-view/masked-view": "0.2.7",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.0",
     "@react-navigation/stack": "^6.3.2",
     "expo": "~46.0.13",
+    "expo-blur": "~11.2.0",
     "expo-status-bar": "~1.4.0",
-    "openpgp": "^5.5.0",
+    "jsrsasign": "^10.5.27",
+    "jsrsasign-util": "^1.0.5",
     "random-word": "^2.0.0",
     "react": "18.0.0",
     "react-native": "0.69.6",
-    "react-native-gesture-handler": "~2.5.0"
+    "react-native-gesture-handler": "~2.5.0",
+    "react-native-openpgp": "^1.0.4",
+    "react-native-rsa": "^0.0.3",
+    "react-native-rsa-native": "^2.0.5",
+    "expo-font": "~10.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -30,7 +40,8 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-react": "^7.31.9",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "openpgp": "^5.5.0"
   },
   "private": true
 }
