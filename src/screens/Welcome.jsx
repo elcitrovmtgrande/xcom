@@ -3,7 +3,7 @@ import {
   View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
 
-function Welcome() {
+function Welcome({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -42,8 +42,8 @@ function Welcome() {
       <TouchableOpacity style={styles.btnLogin}>
         <Text style={styles.btnText}>Log in</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.btnCreate}>
-        <Text style={styles.btnText}>Create an account</Text>
+      <TouchableOpacity style={styles.btnCreate} onPress={() => navigation.navigate('MnemonicGenerate')}>
+        <Text style={styles.btnText}>Create anonymous account</Text>
       </TouchableOpacity>
     </View>
   );

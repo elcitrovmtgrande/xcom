@@ -21,5 +21,6 @@ module.exports = {
     'no-use-before-define': 0,
     'react/no-unstable-nested-components': 0,
     'react/jsx-no-bind': 0,
+    'react/prop-types': 0,
   },
 };

@@ -21,17 +21,15 @@
     "@react-navigation/stack": "^6.3.2",
     "expo": "~46.0.13",
     "expo-blur": "~11.2.0",
+    "expo-font": "~10.2.0",
     "expo-status-bar": "~1.4.0",
     "jsrsasign": "^10.5.27",
     "jsrsasign-util": "^1.0.5",
     "random-word": "^2.0.0",
     "react": "18.0.0",
     "react-native": "0.69.6",
-    "react-native-gesture-handler": "~2.5.0",
-    "react-native-openpgp": "^1.0.4",
-    "react-native-rsa": "^0.0.3",
-    "react-native-rsa-native": "^2.0.5",
-    "expo-font": "~10.2.0"
+    "expo-local-authentication": "~12.3.0",
+    "expo-secure-store": "~11.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
