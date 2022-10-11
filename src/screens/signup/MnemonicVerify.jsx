@@ -2,9 +2,15 @@ import React from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
-function MnemonicVerify({ route }) {
+function MnemonicVerify({ navigation, route }) {
   const { seedphrase } = route.params;
+
+  async function onSessionSave() {
+    await SecureStore.setItemAsync('seedphrase', seedphrase);
+    navigation.navigate('InApp');
+  }
 
   return (
     <View style={styles.container}>
@@ -17,7 +23,7 @@ function MnemonicVerify({ route }) {
       <View style={styles.mnemonicContainer}>
         <Text style={styles.mnemonic}>{seedphrase}</Text>
       </View>
-      <TouchableOpacity style={styles.btn}>
+      <TouchableOpacity style={styles.btn} onPress={onSessionSave}>
         <Text style={styles.btnLabel}>CONFIRM KEYPAIR CREATION</Text>
       </TouchableOpacity>
     </View>
