@@ -3,30 +3,35 @@ import {
   View, Text, StyleSheet, TouchableOpacity,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
-import * as LocalAuthentication from 'expo-local-authentication';
+// import * as LocalAuthentication from 'expo-local-authentication';
 
 function Messages() {
-  const [auth, setAuth] = useState(false);
+  // eslint-disable-next-line no-undef
+  const [auth, setAuth] = useState(true);
 
-  useEffect(async () => {
-    const authReq = await LocalAuthentication.authenticateAsync({
-      promptMessage: 'Every conversation is protected by a double authentication on your device.',
-    });
+  useEffect(() => {
+    async function checkAuth() {
+      // const authReq = await LocalAuthentication.authenticateAsync({
+    //  promptMessage: 'Every conversation is protected by a double authentication on your device.',
+      // });
 
-    setAuth(authReq);
+      // setAuth(authReq);
+    }
+
+    checkAuth();
   }, []);
 
   async function unlock() {
-    const authReq = await LocalAuthentication.authenticateAsync({
-      promptMessage: 'Every conversation is protected by a double authentication on your device.',
-    });
+    // const authReq = await LocalAuthentication.authenticateAsync({
+    //  promptMessage: 'Every conversation is protected by a double authentication on your device.',
+    // });
 
-    setAuth(authReq);
+    // setAuth(authReq);
   }
 
   return (
     <View style={styles.container}>
-      {!auth?.success ? (
+      {!auth ? (
         <BlurView tint="light" intensity={100} style={styles.privacyMask}>
           <TouchableOpacity onPress={unlock}>
             <Text>Unlock</Text>

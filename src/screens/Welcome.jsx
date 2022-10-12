@@ -1,50 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity,
+  View, Text, StyleSheet, TouchableOpacity, ActivityIndicator,
 } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 
 function Welcome({ navigation }) {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function session() {
+      const seed = await SecureStore.getItemAsync('seedphrase');
+      if (seed) {
+        navigation.navigate('InApp');
+      }
+      setLoading(false);
+    }
+
+    session();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Xcom</Text>
-        <Text style={styles.subtitle}>
-          <Text style={styles.kpi}>0%</Text>
-          {' '}
-          registration.
-        </Text>
-        <Text style={styles.subtitle}>
-          <Text style={styles.kpi}>0%</Text>
-          {' '}
-          tracking.
-        </Text>
-        <Text style={styles.subtitle}>
-          <Text style={styles.kpi}>0%</Text>
-          {' '}
-          spying.
-        </Text>
-        <Text style={styles.subtitle}>
-          <Text style={styles.kpi}>100%</Text>
-          {' '}
-          wolrdwide.
-        </Text>
-        <Text style={styles.subtitle}>
-          <Text style={styles.kpi}>100%</Text>
-          {' '}
-          anonymous.
-        </Text>
-        <Text style={styles.subtitle}>
-          <Text style={styles.kpi}>100%</Text>
-          {' '}
-          privacy.
-        </Text>
-      </View>
-      <TouchableOpacity style={styles.btnLogin}>
-        <Text style={styles.btnText}>Log in</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btnCreate} onPress={() => navigation.navigate('MnemonicGenerate')}>
-        <Text style={styles.btnText}>Create anonymous account</Text>
-      </TouchableOpacity>
+      {!loading ? (
+        <>
+          <View style={styles.header}>
+            <Text style={styles.title}>Xcom</Text>
+            <Text style={styles.subtitle}>
+              <Text style={styles.kpi}>0%</Text>
+              {' '}
+              registration.
+            </Text>
+            <Text style={styles.subtitle}>
+              <Text style={styles.kpi}>0%</Text>
+              {' '}
+              tracking.
+            </Text>
+            <Text style={styles.subtitle}>
+              <Text style={styles.kpi}>0%</Text>
+              {' '}
+              spying.
+            </Text>
+            <Text style={styles.subtitle}>
+              <Text style={styles.kpi}>100%</Text>
+              {' '}
+              wolrdwide.
+            </Text>
+            <Text style={styles.subtitle}>
+              <Text style={styles.kpi}>100%</Text>
+              {' '}
+              anonymous.
+            </Text>
+            <Text style={styles.subtitle}>
+              <Text style={styles.kpi}>100%</Text>
+              {' '}
+              privacy.
+            </Text>
+          </View>
+          <TouchableOpacity style={styles.btnLogin}>
+            <Text style={styles.btnText}>Log in</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btnCreate} onPress={() => navigation.navigate('MnemonicGenerate')}>
+            <Text style={styles.btnText}>Create anonymous account</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <ActivityIndicator size="large" color="black" />
+      )}
     </View>
   );
 }

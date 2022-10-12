@@ -18,7 +18,10 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "To secure user's encrypted conversations."
+      }
     },
     "android": {
       "adaptiveIcon": {
