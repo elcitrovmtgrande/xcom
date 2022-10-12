@@ -13,7 +13,6 @@ import { keypairFromSeed } from '../utils/tools';
 function Welcome({ navigation }) {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  console.log('user from store:', user);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

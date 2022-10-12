@@ -80,7 +80,7 @@ function Settings() {
   return (
     <View style={styles.container}>
       <Identicon
-        value="FT3T42wASNbFQ4oCPgVcMyzQejdPD5r4dMwuhp6Qhy888hS"
+        value={user.address}
         size={100}
       />
       <View style={styles.values}>

@@ -14,7 +14,6 @@ function MnemonicGenerate({ navigation }) {
   }
 
   function onNext() {
-    console.log(mnemonic);
     navigation.navigate('MnemonicVerify', { seedphrase: mnemonic });
   }
 

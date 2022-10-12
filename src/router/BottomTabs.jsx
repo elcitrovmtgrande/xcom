@@ -1,8 +1,10 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Identicon from '@polkadot/reactnative-identicon';
 import Messages from '../screens/Messages';
 import Settings from '../screens/Settings';
 import Contacts from '../screens/Contacts';
@@ -10,6 +12,9 @@ import Contacts from '../screens/Contacts';
 const Tab = createBottomTabNavigator();
 
 function BottomTabs() {
+  const user = useSelector((state) => state.user);
+  const { address } = user;
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -49,7 +54,13 @@ function BottomTabs() {
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account-settings-outline" size={size * 1.2} color={color} />
+            <View style={[styles.pp, { borderColor: color }]}>
+              <Identicon
+                style={styles.pp}
+                value={user.address}
+                size={size * 1.2}
+              />
+            </View>
           ),
           tabBarLabel: () => null,
         }}
@@ -57,5 +68,13 @@ function BottomTabs() {
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  pp: {
+    borderWidth: 2,
+    borderRadius: 100,
+    padding: 2,
+  },
+});
 
 export default BottomTabs;

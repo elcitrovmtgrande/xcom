@@ -20,7 +20,7 @@ function AddContact({ navigation, route }) {
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
         <View style={styles.top}>
           <View style={styles.header}>
-            <Text style={styles.title}>Add</Text>
+            <Text style={styles.title}>{initialContact ? 'Modify' : 'Add'}</Text>
             <TouchableOpacity style={styles.backBtn} onPress={onBack}>
               <MaterialIcons name="arrow-downward" size={24} color="white" />
             </TouchableOpacity>
