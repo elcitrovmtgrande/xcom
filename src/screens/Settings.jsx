@@ -10,10 +10,9 @@ import {
   mnemonicValidate,
   ed25519PairFromSecret,
 } from '@polkadot/util-crypto';
-
 import { Keyring } from '@polkadot/keyring';
-
 import { stringToU8a, u8aToHex, u8aToString } from '@polkadot/util';
+import Identicon from '@polkadot/reactnative-identicon';
 
 function Settings() {
   // async function onPress() {
@@ -114,6 +113,10 @@ function Settings() {
       <TouchableOpacity onPress={keyringFx}>
         <Text>Go</Text>
       </TouchableOpacity>
+      <Identicon
+        value="FT3T42wASNbFQ4oCPgVcMyzQejdPD5r4dMwuhp6Qhy888hS"
+        size={100}
+      />
     </View>
   );
 }

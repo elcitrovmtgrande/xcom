@@ -16,6 +16,7 @@ import {
 import { Keyring } from '@polkadot/keyring';
 
 import { stringToU8a, u8aToHex, u8aToString } from '@polkadot/util';
+import Identicon from '@polkadot/reactnative-identicon';
 import generateContacts from '../mocks/contacts';
 
 const contacts = generateContacts(30);
@@ -78,8 +79,11 @@ function Contacts({ navigation }) {
         <TextInput style={styles.searchInput} placeholder="Search in your contacts" />
         {contacts.map((c) => (
           <TouchableOpacity key={c.address} style={styles.contact} onPress={() => onContact(c)}>
-            <Text style={styles.contactName}>{c.nickname}</Text>
-            <Text style={styles.contactPubKey}>{c.address}</Text>
+            <Identicon value={c.address} size={70} />
+            <View style={styles.id}>
+              <Text style={styles.contactName}>{c.nickname}</Text>
+              <Text style={styles.contactPubKey}>{c.address}</Text>
+            </View>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -130,6 +134,9 @@ const styles = StyleSheet.create({
   },
   contact: {
     marginTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   contactName: {
     fontSize: 20,
@@ -140,6 +147,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
     maxWidth: 300,
     color: '#666464',
+  },
+  id: {
+    marginLeft: 20,
   },
 });
 
