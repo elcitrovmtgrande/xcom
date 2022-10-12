@@ -1,3 +1,4 @@
+import { Keyring } from '@polkadot/keyring';
 import {
   mnemonicGenerate,
   mnemonicToMiniSecret,
@@ -7,13 +8,11 @@ import {
   encodeAddress,
 } from '@polkadot/util-crypto';
 
-import { Keyring } from '@polkadot/keyring';
-
 import {
   stringToU8a, u8aToHex, u8aToString, isHex, hexToU8a,
 } from '@polkadot/util';
 
-const isValidPolkadotAddress = (address) => {
+function isValidPolkadotAddress(address) {
   try {
     encodeAddress(
       isHex(address)
@@ -25,11 +24,18 @@ const isValidPolkadotAddress = (address) => {
   } catch (error) {
     return false;
   }
-};
+}
+
+function keypairFromSeed(seed) {
+  const keyring = new Keyring({ type: 'sr25519', ss58Format: 2 });
+  const keypair = keyring.addFromMnemonic(seed);
+  return keypair;
+}
 
 const tools = {
   isValidPolkadotAddress,
+  keypairFromSeed,
 };
 
 export default tools;
-export { isValidPolkadotAddress };
+export { isValidPolkadotAddress, keypairFromSeed };

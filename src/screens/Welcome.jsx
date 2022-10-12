@@ -3,16 +3,31 @@ import {
   View, Text, StyleSheet, TouchableOpacity, ActivityIndicator,
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  u8aToHex,
+} from '@polkadot/util';
+import { updateUser } from '../store/features/userSlice';
+import { keypairFromSeed } from '../utils/tools';
 
 function Welcome({ navigation }) {
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  console.log('user from store:', user);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function session() {
       const seed = await SecureStore.getItemAsync('seedphrase');
       if (seed) {
-        navigation.navigate('InApp');
+        const keypair = keypairFromSeed(seed);
+        const u = {
+          address: keypair.address,
+          publicKey: u8aToHex(keypair.publicKey),
+        };
+        dispatch(updateUser(u));
       }
+      navigation.navigate('InApp');
       setLoading(false);
     }
 
