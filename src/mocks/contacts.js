@@ -20,7 +20,7 @@ function generateContacts(length) {
 
     const user = {
       nickname: faker.internet.userName(),
-      publicKey: u8aToHex(pair.publicKey),
+      address: pair.address,
     };
 
     contacts.push(user);

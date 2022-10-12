@@ -1,9 +1,10 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import Welcome from '../screens/Welcome';
 import BottomTabs from './BottomTabs';
 import MnemonicGenerate from '../screens/signup/MnemonicGenerate';
 import MnemonicVerify from '../screens/signup/MnemonicVerify';
+import AddContact from '../screens/AddContact';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,11 @@ function MainStack() {
         name="MnemonicVerify"
         component={MnemonicVerify}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="AddContact"
+        component={AddContact}
+        options={{ headerShown: false, ...TransitionPresets.ModalSlideFromBottomIOS }}
       />
     </Stack.Navigator>
   );

@@ -4,18 +4,67 @@ import {
   TextInput,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import {
+  mnemonicGenerate,
+  mnemonicToMiniSecret,
+  mnemonicValidate,
+  ed25519PairFromSecret,
+  decodeAddress,
+} from '@polkadot/util-crypto';
+
+import { Keyring } from '@polkadot/keyring';
+
+import { stringToU8a, u8aToHex, u8aToString } from '@polkadot/util';
 import generateContacts from '../mocks/contacts';
 
 const contacts = generateContacts(30);
 
-function Contacts() {
+function Contacts({ navigation }) {
+  const { showActionSheetWithOptions } = useActionSheet();
+
   function onNew() {
-    // Todo
+    navigation.navigate('AddContact');
   }
 
   function onContact(contact) {
-    // Todo
+    const options = ['Modify', 'Remove', 'Cancel'];
+    const destructiveButtonIndex = 1;
+    const cancelButtonIndex = 2;
+
+    showActionSheetWithOptions({
+      title: contact.nickname,
+      message: 'What do you want with this contact ?',
+      options,
+      cancelButtonIndex,
+      destructiveButtonIndex,
+    }, (selectedIndex) => {
+      // eslint-disable-next-line default-case
+      switch (selectedIndex) {
+        case 0:
+          // Save
+          navigation.navigate('AddContact', { initialContact: contact });
+          break;
+
+        case destructiveButtonIndex:
+          // Delete
+          break;
+
+        case cancelButtonIndex:
+          // Canceled
+      }
+    });
   }
+
+  // function publicKeyFromAddress() {
+  //   const seedphrase = mnemonicGenerate();
+  //   const keyring = new Keyring({ type: 'sr25519', ss58Format: 2 });
+
+  //   const keypair = keyring.addFromMnemonic(seedphrase);
+
+  //   console.log(u8aToHex(keypair.publicKey));
+  //   console.log(u8aToHex(decodeAddress(keypair.address)));
+  // }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,9 +77,9 @@ function Contacts() {
         </View>
         <TextInput style={styles.searchInput} placeholder="Search in your contacts" />
         {contacts.map((c) => (
-          <TouchableOpacity key={c.publicKey} style={styles.contact} onPress={() => onContact(c)}>
+          <TouchableOpacity key={c.address} style={styles.contact} onPress={() => onContact(c)}>
             <Text style={styles.contactName}>{c.nickname}</Text>
-            <Text style={styles.contactPubKey}>{c.publicKey}</Text>
+            <Text style={styles.contactPubKey}>{c.address}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
