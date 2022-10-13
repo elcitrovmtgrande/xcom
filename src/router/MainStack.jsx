@@ -5,6 +5,7 @@ import BottomTabs from './BottomTabs';
 import MnemonicGenerate from '../screens/signup/MnemonicGenerate';
 import MnemonicVerify from '../screens/signup/MnemonicVerify';
 import AddContact from '../screens/AddContact';
+import NewMessage from '../screens/NewMessage';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,11 @@ function MainStack() {
       <Stack.Screen
         name="AddContact"
         component={AddContact}
+        options={{ headerShown: false, ...TransitionPresets.ModalSlideFromBottomIOS }}
+      />
+      <Stack.Screen
+        name="NewMessage"
+        component={NewMessage}
         options={{ headerShown: false, ...TransitionPresets.ModalSlideFromBottomIOS }}
       />
     </Stack.Navigator>

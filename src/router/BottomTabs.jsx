@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import Identicon from '@polkadot/reactnative-identicon';
-import Messages from '../screens/Messages';
+import Inbox from '../screens/Inbox';
 import Settings from '../screens/Settings';
 import Contacts from '../screens/Contacts';
 
@@ -27,8 +28,8 @@ function BottomTabs() {
       initialRouteName="Contacts"
     >
       <Tab.Screen
-        name="Messages"
-        component={Messages}
+        name="Inbox"
+        component={Inbox}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (

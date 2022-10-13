@@ -5,7 +5,6 @@ import {
 } from '@polkadot/util-crypto';
 
 import { Keyring } from '@polkadot/keyring';
-import { u8aToHex } from '@polkadot/util';
 
 function generateContacts(length) {
   const contacts = [];
