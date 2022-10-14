@@ -3,16 +3,21 @@ import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, Dimensions,
   TextInput,
 } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import { MaterialIcons } from '@expo/vector-icons';
+import { updateContacts } from '../store/features/userSlice';
 import db from '../db';
 import Popup from '../utils/Popup';
 import v from '../utils/validation';
 
 function AddContact({ navigation, route }) {
+  const contacts = useSelector((state) => state.user.contacts);
   const initialContact = route?.params?.initialContact || null;
 
   const [nickname, setNickname] = useState(initialContact ? initialContact.nickname : '');
   const [address, setAddress] = useState(initialContact ? initialContact.address : '');
+
+  const dispatch = useDispatch();
 
   function onBack() {
     navigation.goBack();
@@ -23,15 +28,15 @@ function AddContact({ navigation, route }) {
       Popup.message('Nickname gotta have at least a 2 chars length');
     } else if (!v.user.address(address)) {
       Popup.message('Address is invalid. Did you type it corrrectly ?');
+    } else if (contacts.find((c) => c.address === address)) {
+      Popup.message('This address is already registered in your contacts.');
     } else {
-      const success = await db.saveContact({
+      await db.saveContact({
         address,
         nickname,
       });
-      console.log(success);
-      const contacts = await db.getContacts();
-      // Mise à jour du state
-      console.log(contacts);
+      const updatedContacts = await db.getContacts();
+      dispatch(updateContacts(updatedContacts));
       navigation.goBack();
     }
   }

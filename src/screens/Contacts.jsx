@@ -24,8 +24,9 @@ import Identicon from '@polkadot/reactnative-identicon';
 // console.log(JSON.stringify(contacts));
 
 function Contacts({ navigation }) {
-  const user = useSelector((state) => state.user);
-  const { contacts } = user;
+  const contacts = useSelector((state) => state.user.contacts);
+
+  const [filter, setFilter] = useState('');
 
   const { showActionSheetWithOptions } = useActionSheet();
 
@@ -57,7 +58,7 @@ function Contacts({ navigation }) {
           break;
 
         case cancelButtonIndex:
-          // Canceled
+        // Canceled
       }
     });
   }
@@ -81,16 +82,25 @@ function Contacts({ navigation }) {
             <MaterialIcons name="person-add" size={24} color="white" />
           </TouchableOpacity>
         </View>
-        <TextInput style={styles.searchInput} placeholder="Search in your contacts" />
-        {contacts.map((c) => (
-          <TouchableOpacity key={c.address} style={styles.contact} onPress={() => onContact(c)}>
-            <Identicon value={c.address} size={70} />
-            <View style={styles.id}>
-              <Text style={styles.contactName}>{c.nickname}</Text>
-              <Text style={styles.contactPubKey}>{c.address}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search in your contacts"
+          onChangeText={setFilter}
+        />
+        {contacts
+          .filter(
+            (c) => c.nickname.toLowerCase().includes(filter.toLowerCase())
+              || c.address.toLowerCase().includes(filter.toLowerCase()),
+          )
+          .map((c) => (
+            <TouchableOpacity key={c.address} style={styles.contact} onPress={() => onContact(c)}>
+              <Identicon value={c.address} size={70} />
+              <View style={styles.id}>
+                <Text style={styles.contactName}>{c.nickname}</Text>
+                <Text style={styles.contactPubKey}>{c.address}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
       </ScrollView>
     </SafeAreaView>
   );

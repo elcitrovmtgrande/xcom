@@ -18,10 +18,13 @@ export const userSlice = createSlice({
       state.publicKey = action.payload.publicKey;
       state.contacts = action.payload.contacts;
     },
+    updateContacts: (state, action) => {
+      state.contacts = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateUser } = userSlice.actions;
+export const { updateUser, updateContacts } = userSlice.actions;
 
 export default userSlice.reducer;
