@@ -12,7 +12,7 @@ class Database {
       try {
         this.db.transaction((tx) => {
           tx.executeSql(
-            'create table if not exists CONTACTS (address text primary key not null, nickname text);',
+            'CREATE TABLE IF NOT EXISTS contacts (address text primary key not null, nickname text);',
           );
         });
         fnResolve(true);
@@ -27,14 +27,13 @@ class Database {
     return new Promise((fnResolve, fnReject) => {
       this.db.transaction(
         (tx) => {
-          tx.executeSql('insert into CONTACTS (address, nickname) values (?, ?)', [address, nickname]);
-          tx.executeSql('select * from CONTACTS', [], (_, { rows }) => {
-            console.log(JSON.stringify(rows));
+          tx.executeSql('INSERT INTO contacts (address, nickname) VALUES (?, ?)', [address, nickname]);
+          tx.executeSql('SELECT * FROM contacts', [], (_, { rows }) => {
             fnResolve();
           });
         },
         null,
-        () => {}, // forceUpdate
+        () => {}, // forceUpdate function
       );
     });
   }
@@ -43,10 +42,24 @@ class Database {
     return new Promise((fnResolve, fnReject) => {
       this.db.transaction(
         (tx) => {
-          tx.executeSql('select * from CONTACTS', [], (_, { rows }) => {
+          tx.executeSql('SELECT * FROM contacts', [], (_, { rows }) => {
             fnResolve(rows._array);
           });
         },
+      );
+    });
+  }
+
+  updateContact(contact) {
+    const { nickname, address } = contact;
+    return new Promise((fnResolve, fnReject) => {
+      this.db.transaction(
+        (tx) => {
+          tx.executeSql(`UPDATE contacts SET nickname = '${nickname}' WHERE address = '${address}'`, [], () => fnResolve);
+          fnResolve();
+        },
+        null,
+        () => {}, // forceUpdate
       );
     });
   }

@@ -13,9 +13,10 @@ import v from '../utils/validation';
 function AddContact({ navigation, route }) {
   const contacts = useSelector((state) => state.user.contacts);
   const initialContact = route?.params?.initialContact || null;
+  const editMode = !!initialContact;
 
-  const [nickname, setNickname] = useState(initialContact ? initialContact.nickname : '');
-  const [address, setAddress] = useState(initialContact ? initialContact.address : '');
+  const [nickname, setNickname] = useState(editMode ? initialContact.nickname : '');
+  const [address, setAddress] = useState(editMode ? initialContact.address : '');
 
   const dispatch = useDispatch();
 
@@ -32,6 +33,24 @@ function AddContact({ navigation, route }) {
       Popup.message('This address is already registered in your contacts.');
     } else {
       await db.saveContact({
+        address,
+        nickname,
+      });
+      const updatedContacts = await db.getContacts();
+      dispatch(updateContacts(updatedContacts));
+      navigation.goBack();
+    }
+  }
+
+  function onCopy() {
+    Popup.message('Copied to clipboard');
+  }
+
+  async function onModify() {
+    if (!v.user.nickname(nickname)) {
+      Popup.message('Nickname gotta have at least a 2 chars length');
+    } else {
+      await db.updateContact({
         address,
         nickname,
       });
@@ -72,14 +91,29 @@ function AddContact({ navigation, route }) {
             or import a file containing a QR Code.
           </Text>
           <View style={styles.publicKeyRow}>
-            <TextInput style={styles.pubKeyInput} placeholder="Address" value={address} onChangeText={setAddress} />
-            <TouchableOpacity style={styles.qrCodeScan}>
-              <MaterialIcons name="qr-code" size={24} color="white" />
-            </TouchableOpacity>
+            <TextInput
+              style={[styles.pubKeyInput, editMode && { color: 'grey' }]}
+              placeholder="Address"
+              autoComplete="off"
+              editable={!editMode}
+              value={address}
+              onChangeText={setAddress}
+            />
+            {editMode ? (
+              <TouchableOpacity style={styles.qrCodeScan} onPress={onCopy}>
+                <MaterialIcons name="content-copy" size={24} color="white" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.qrCodeScan}>
+                <MaterialIcons name="qr-code" size={24} color="white" />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
-        <TouchableOpacity style={styles.submitBtn} onPress={onSave}>
-          <Text style={styles.submitBtnLabel}>Register new contact</Text>
+        <TouchableOpacity style={styles.submitBtn} onPress={editMode ? onModify : onSave}>
+          <Text style={styles.submitBtnLabel}>
+            {editMode ? 'Modify' : 'Register new contact'}
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
