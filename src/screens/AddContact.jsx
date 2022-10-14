@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { MaterialIcons } from '@expo/vector-icons';
+import * as Clipboard from 'expo-clipboard';
 import { updateContacts } from '../store/features/userSlice';
 import db from '../db';
 import Popup from '../utils/Popup';
@@ -42,7 +43,8 @@ function AddContact({ navigation, route }) {
     }
   }
 
-  function onCopy() {
+  async function onCopy() {
+    await Clipboard.setStringAsync(address);
     Popup.message('Copied to clipboard');
   }
 
