@@ -6,6 +6,7 @@ export const userSlice = createSlice({
   initialState: {
     address: null,
     publicKey: null,
+    contacts: [],
   },
   reducers: {
     updateUser: (state, action) => {
@@ -15,6 +16,7 @@ export const userSlice = createSlice({
       // immutable state based off those changes
       state.address = action.payload.address;
       state.publicKey = action.payload.publicKey;
+      state.contacts = action.payload.contacts;
     },
   },
 });

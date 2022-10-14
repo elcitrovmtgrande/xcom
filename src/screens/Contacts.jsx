@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,
   TextInput,
 } from 'react-native';
+import { useSelector } from 'react-redux';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import {
@@ -17,12 +18,15 @@ import { Keyring } from '@polkadot/keyring';
 
 import { stringToU8a, u8aToHex, u8aToString } from '@polkadot/util';
 import Identicon from '@polkadot/reactnative-identicon';
-import generateContacts from '../mocks/contacts';
+// import generateContacts from '../mocks/contacts';
 
-const contacts = generateContacts(30);
-console.log(JSON.stringify(contacts));
+// const contacts = generateContacts(30);
+// console.log(JSON.stringify(contacts));
 
 function Contacts({ navigation }) {
+  const user = useSelector((state) => state.user);
+  const { contacts } = user;
+
   const { showActionSheetWithOptions } = useActionSheet();
 
   function onNew() {

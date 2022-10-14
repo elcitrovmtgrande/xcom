@@ -4,6 +4,7 @@ import * as SQLite from 'expo-sqlite';
 class Database {
   constructor() {
     this.db = SQLite.openDatabase('db.db');
+    this.initContactTable();
   }
 
   initContactTable() {
@@ -51,4 +52,6 @@ class Database {
   }
 }
 
-export default Database;
+const db = new Database();
+
+export default db;

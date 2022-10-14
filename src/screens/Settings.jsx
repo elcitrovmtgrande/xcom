@@ -84,7 +84,7 @@ function Settings() {
         size={100}
       />
       <View style={styles.values}>
-        <Text style={styles.label}>Your address</Text>
+        <Text style={styles.label}>Your public address</Text>
         <View style={styles.valueRow}>
           <Text style={styles.value}>{address}</Text>
           <TouchableOpacity style={styles.copyBtn}>

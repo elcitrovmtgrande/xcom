@@ -3,15 +3,15 @@ import {
   View, Text, StyleSheet, TouchableOpacity, ActivityIndicator,
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   u8aToHex,
 } from '@polkadot/util';
 import { updateUser } from '../store/features/userSlice';
 import { keypairFromSeed } from '../utils/tools';
+import db from '../db';
 
 function Welcome({ navigation }) {
-  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
@@ -24,6 +24,7 @@ function Welcome({ navigation }) {
           address: keypair.address,
           publicKey: u8aToHex(keypair.publicKey),
         };
+        u.contacts = await db.getContacts();
         dispatch(updateUser(u));
       }
       navigation.navigate('InApp');

@@ -4,9 +4,9 @@ import {
   TextInput,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import Database from '../db';
-
-const db = new Database();
+import db from '../db';
+import Popup from '../utils/Popup';
+import v from '../utils/validation';
 
 function AddContact({ navigation, route }) {
   const initialContact = route?.params?.initialContact || null;
@@ -19,13 +19,21 @@ function AddContact({ navigation, route }) {
   }
 
   async function onSave() {
-    // todo
-    const contacts = await db.getContacts();
-    console.log(contacts);
-    // db.saveContact({
-    //   address: 'Ek2Dkj5sHMbCo6NsXwSWdwPhfxT7RSbSg7YgsAuZ9YPomt5',
-    //   nickname: 'totono',
-    // });
+    if (!v.user.nickname(nickname)) {
+      Popup.message('Nickname gotta have at least a 2 chars length');
+    } else if (!v.user.address(address)) {
+      Popup.message('Address is invalid. Did you type it corrrectly ?');
+    } else {
+      const success = await db.saveContact({
+        address,
+        nickname,
+      });
+      console.log(success);
+      const contacts = await db.getContacts();
+      // Mise à jour du state
+      console.log(contacts);
+      navigation.goBack();
+    }
   }
 
   return (
@@ -44,7 +52,7 @@ function AddContact({ navigation, route }) {
             This information is required to get it simpler on your device
             since public keys are pretty difficult to remind.
             {'\n'}
-            <Text style={{ fontWeight: 'bold' }}>Spaces are not allowed</Text>
+            <Text style={{ fontWeight: 'bold' }}>At least two chars. Spaces are not allowed</Text>
             .
           </Text>
           <TextInput style={styles.textInput} placeholder="Nickname" value={nickname} onChangeText={setNickname} />
