@@ -1,17 +1,54 @@
-import Realm from 'realm';
-import ContactSchema from './schemas/Contact';
-import MessageSchema from './schemas/Message';
+/* eslint-disable no-underscore-dangle */
+import * as SQLite from 'expo-sqlite';
 
-async function dbConnect() {
-  // Open a local realm file with a particular path & predefined Car schema
-  try {
-    const realm = await Realm.open({
-      schema: [ContactSchema, MessageSchema],
+class Database {
+  constructor() {
+    this.db = SQLite.openDatabase('db.db');
+  }
+
+  initContactTable() {
+    return new Promise((fnResolve, fnReject) => {
+      try {
+        this.db.transaction((tx) => {
+          tx.executeSql(
+            'create table if not exists CONTACTS (address text primary key not null, nickname text);',
+          );
+        });
+        fnResolve(true);
+      } catch (e) {
+        fnReject();
+      }
     });
-    realm.close();
-  } catch (err) {
-    console.error('Failed to open the realm', err.message);
+  }
+
+  saveContact(contact) {
+    const { address, nickname } = contact;
+    return new Promise((fnResolve, fnReject) => {
+      this.db.transaction(
+        (tx) => {
+          tx.executeSql('insert into CONTACTS (address, nickname) values (?, ?)', [address, nickname]);
+          tx.executeSql('select * from CONTACTS', [], (_, { rows }) => {
+            console.log(JSON.stringify(rows));
+            fnResolve();
+          });
+        },
+        null,
+        () => {}, // forceUpdate
+      );
+    });
+  }
+
+  getContacts() {
+    return new Promise((fnResolve, fnReject) => {
+      this.db.transaction(
+        (tx) => {
+          tx.executeSql('select * from CONTACTS', [], (_, { rows }) => {
+            fnResolve(rows._array);
+          });
+        },
+      );
+    });
   }
 }
 
-export default dbConnect;
+export default Database;

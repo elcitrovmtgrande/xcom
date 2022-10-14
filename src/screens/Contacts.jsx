@@ -20,6 +20,7 @@ import Identicon from '@polkadot/reactnative-identicon';
 import generateContacts from '../mocks/contacts';
 
 const contacts = generateContacts(30);
+console.log(JSON.stringify(contacts));
 
 function Contacts({ navigation }) {
   const { showActionSheetWithOptions } = useActionSheet();

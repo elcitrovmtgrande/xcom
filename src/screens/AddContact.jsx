@@ -4,6 +4,9 @@ import {
   TextInput,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import Database from '../db';
+
+const db = new Database();
 
 function AddContact({ navigation, route }) {
   const initialContact = route?.params?.initialContact || null;
@@ -13,6 +16,16 @@ function AddContact({ navigation, route }) {
 
   function onBack() {
     navigation.goBack();
+  }
+
+  async function onSave() {
+    // todo
+    const contacts = await db.getContacts();
+    console.log(contacts);
+    // db.saveContact({
+    //   address: 'Ek2Dkj5sHMbCo6NsXwSWdwPhfxT7RSbSg7YgsAuZ9YPomt5',
+    //   nickname: 'totono',
+    // });
   }
 
   return (
@@ -52,7 +65,7 @@ function AddContact({ navigation, route }) {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity style={styles.submitBtn}>
+        <TouchableOpacity style={styles.submitBtn} onPress={onSave}>
           <Text style={styles.submitBtnLabel}>Register new contact</Text>
         </TouchableOpacity>
       </ScrollView>
