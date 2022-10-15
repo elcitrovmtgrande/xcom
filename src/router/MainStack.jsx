@@ -6,6 +6,7 @@ import MnemonicGenerate from '../screens/signup/MnemonicGenerate';
 import MnemonicVerify from '../screens/signup/MnemonicVerify';
 import AddContact from '../screens/AddContact';
 import NewMessage from '../screens/NewMessage';
+import Chat from '../screens/Chat';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,11 @@ function MainStack() {
       <Stack.Screen
         name="MnemonicGenerate"
         component={MnemonicGenerate}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Chat"
+        component={Chat}
         options={{ headerShown: false }}
       />
       <Stack.Screen

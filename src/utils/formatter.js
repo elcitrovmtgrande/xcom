@@ -19,7 +19,7 @@ const formatter = {
       };
 
       // Add in formatted inbox
-      inbox.push(conversation);
+      inbox.unshift(conversation);
     });
 
     return inbox;

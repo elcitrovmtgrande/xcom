@@ -23,35 +23,6 @@ function Chats({ navigation }) {
     navigation.navigate('NewMessage');
   }
 
-  function onContact(contact) {
-    const options = ['Modify', 'Remove', 'Cancel'];
-    const destructiveButtonIndex = 1;
-    const cancelButtonIndex = 2;
-
-    showActionSheetWithOptions({
-      title: contact.nickname,
-      message: 'What do you want with this contact ?',
-      options,
-      cancelButtonIndex,
-      destructiveButtonIndex,
-    }, (selectedIndex) => {
-      // eslint-disable-next-line default-case
-      switch (selectedIndex) {
-        case 0:
-          // Save
-          navigation.navigate('AddContact', { initialContact: contact });
-          break;
-
-        case destructiveButtonIndex:
-          // Delete
-          break;
-
-        case cancelButtonIndex:
-          // Canceled
-      }
-    });
-  }
-
   // function publicKeyFromAddress() {
   //   const seedphrase = mnemonicGenerate();
   //   const keyring = new Keyring({ type: 'sr25519', ss58Format: 2 });
@@ -69,6 +40,10 @@ function Chats({ navigation }) {
     return recipient;
   }
 
+  function onChat(chat) {
+    navigation.navigate('Chat', { address: chat.with });
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} contentContainerStyle={{ paddingBottom: 60 }}>
@@ -81,7 +56,7 @@ function Chats({ navigation }) {
         <View style={{ marginTop: 20 }} />
         {/* <TextInput style={styles.searchInput} placeholder="Search in your chats" /> */}
         {inbox.map((c) => (
-          <TouchableOpacity key={c.with} style={styles.contact} onPress={() => onContact(c)}>
+          <TouchableOpacity key={c.with} style={styles.contact} onPress={() => onChat(c)}>
             <Identicon value={c.with} size={70} />
             <View style={styles.id}>
               <Text style={styles.contactName}>{recipientName(c.with)}</Text>

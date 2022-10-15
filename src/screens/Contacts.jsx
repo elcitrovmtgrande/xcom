@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    height: 100,
   },
   contactName: {
     fontSize: 20,
