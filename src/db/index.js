@@ -3,7 +3,7 @@ import * as SQLite from 'expo-sqlite';
 
 class Database {
   constructor() {
-    this.db = SQLite.openDatabase('db.db');
+    this.db = SQLite.openDatabase('test.db');
     this.init();
   }
 
@@ -12,12 +12,12 @@ class Database {
       try {
         this.db.transaction((tx) => {
           tx.executeSql(
-            'CREATE TABLE IF NOT EXISTS contacts (address text primary key not null, nickname text);',
+            'CREATE TABLE IF NOT EXISTS contacts (address TEXT PRIMARY KEY NOT NULL, nickname text);',
           );
         });
         this.db.transaction((tx) => {
           tx.executeSql(
-            'CREATE TABLE IF NOT EXISTS chats (uuid text primary key not null, sender TEXT, recipient TEXT, encoded TEXT, decoded TEXT, sentAt TEXT, deliveredAt TEXT, readAt TEXT);',
+            'CREATE TABLE IF NOT EXISTS chats (identifier TEXT PRIMARY KEY NOT NULL, sender TEXT, recipient TEXT, encoded TEXT, decoded TEXT, sentAt TEXT, deliveredAt TEXT, readAt TEXT);',
           );
         });
       } catch (e) {
@@ -90,6 +90,43 @@ class Database {
             fnResolve(rows._array);
           });
         },
+      );
+    });
+  }
+
+  /**
+   * {
+      id: faker.datatype.uuid(),
+      sender: isSender() ? userPair.address : contact.address,
+      recipient: isSender() ? contact.address : userPair.address,
+      decoded: content,
+      encoded: u8aToHex(userPair.encryptMessage(message, contact.contactPublicKey)),
+      sentAt: faker.date.past().toJSON(),
+      receivedAt: moment().toJSON(),
+      readAt: faker.date.future().toJSON(),
+    };} message
+   */
+
+  saveMessage(message) {
+    const {
+      identifier, sender, recipient, encoded, decoded, sentAt, deliveredAt, readAt,
+    } = message;
+    return new Promise((fnResolve, fnReject) => {
+      this.db.transaction(
+        (tx) => {
+          tx.executeSql('INSERT INTO chats (identifier, sender, recipient, encoded, decoded, sentAt, deliveredAt, readAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
+            identifier, sender, recipient, encoded, decoded, sentAt, deliveredAt, readAt,
+          ], () => {}, (error, err) => {
+            console.log(error, err);
+          });
+          tx.executeSql('SELECT * FROM chats', [], (_, { rows }) => {
+            fnResolve(rows._array);
+          }, (error, err) => {
+            console.log(error, err);
+          });
+        },
+        null,
+        () => {}, // forceUpdate function
       );
     });
   }

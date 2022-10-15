@@ -5,12 +5,16 @@ import {
 } from 'react-native';
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import { useSelector } from 'react-redux';
 import Identicon from '@polkadot/reactnative-identicon';
 import generateContacts from '../mocks/contacts';
+import generateMessages from '../mocks/messages';
 
 const contacts = generateContacts(30);
 
 function Chats({ navigation }) {
+  // const user = useSelector((state) => state.user);
+  // generateMessages(user.seed, 5);
   const { showActionSheetWithOptions } = useActionSheet();
 
   function onNew() {

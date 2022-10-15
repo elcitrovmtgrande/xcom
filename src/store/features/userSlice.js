@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 export const userSlice = createSlice({
   name: 'counter',
   initialState: {
+    seed: '',
     address: null,
     publicKey: null,
     contacts: [],
@@ -14,6 +15,7 @@ export const userSlice = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
+      state.seed = action.payload.seed;
       state.address = action.payload.address;
       state.publicKey = action.payload.publicKey;
       state.contacts = action.payload.contacts;

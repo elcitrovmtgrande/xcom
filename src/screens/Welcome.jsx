@@ -21,6 +21,7 @@ function Welcome({ navigation }) {
       if (seed) {
         const keypair = keypairFromSeed(seed);
         const u = {
+          seed,
           address: keypair.address,
           publicKey: u8aToHex(keypair.publicKey),
         };

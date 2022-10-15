@@ -5,6 +5,7 @@ import moment from 'moment';
 import { u8aToHex } from '@polkadot/util';
 import generateContacts from './contacts';
 import { keypairFromSeed } from '../utils/tools';
+import db from '../db';
 
 /**
  * Generates messages for a given address
@@ -26,13 +27,13 @@ function generateMessages(userSeed, length) {
     const content = faker.lorem.sentences(2);
 
     const message = {
-      id: faker.datatype.uuid(),
+      identifier: faker.datatype.uuid(),
       sender: isSender() ? userPair.address : contact.address,
       recipient: isSender() ? contact.address : userPair.address,
       decoded: content,
       encoded: u8aToHex(userPair.encryptMessage(message, contact.contactPublicKey)),
       sentAt: faker.date.past().toJSON(),
-      receivedAt: moment().toJSON(),
+      deliveredAt: moment().toJSON(),
       readAt: faker.date.future().toJSON(),
     };
 
