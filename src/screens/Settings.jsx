@@ -2,6 +2,7 @@ import React from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, Dimensions,
 } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import { useSelector } from 'react-redux';
 // import {
 //   mnemonicGenerate,
@@ -12,8 +13,8 @@ import { useSelector } from 'react-redux';
 // import { Keyring } from '@polkadot/keyring';
 // import { stringToU8a, u8aToHex, u8aToString } from '@polkadot/util';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
 import Identicon from '@polkadot/reactnative-identicon';
+import Popup from '../utils/Popup';
 
 function Settings() {
   const user = useSelector((state) => state.user);
@@ -77,6 +78,16 @@ function Settings() {
   //   }
   // }
 
+  async function onAddressCopy() {
+    await Clipboard.setStringAsync(address);
+    Popup.message('Copied to clipboard');
+  }
+
+  async function onPublickeyCopy() {
+    await Clipboard.setStringAsync(publicKey);
+    Popup.message('Copied to clipboard');
+  }
+
   return (
     <View style={styles.container}>
       <Identicon
@@ -87,14 +98,14 @@ function Settings() {
         <Text style={styles.label}>Your public address</Text>
         <View style={styles.valueRow}>
           <Text style={styles.value}>{address}</Text>
-          <TouchableOpacity style={styles.copyBtn}>
+          <TouchableOpacity style={styles.copyBtn} onPress={onAddressCopy}>
             <MaterialCommunityIcons name="content-copy" size={24} color="white" />
           </TouchableOpacity>
         </View>
         <Text style={styles.label}>Your public key</Text>
         <View style={styles.valueRow}>
           <Text style={styles.value}>{publicKey}</Text>
-          <TouchableOpacity style={styles.copyBtn}>
+          <TouchableOpacity style={styles.copyBtn} onPress={onPublickeyCopy}>
             <MaterialCommunityIcons name="content-copy" size={24} color="white" />
           </TouchableOpacity>
         </View>
