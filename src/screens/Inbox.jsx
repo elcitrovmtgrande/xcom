@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,
-  TextInput,
+  TextInput, ActivityIndicator,
 } from 'react-native';
 import moment from 'moment';
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
-import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useSelector } from 'react-redux';
 import Identicon from '@polkadot/reactnative-identicon';
+import db from '../db';
 import generateContacts from '../mocks/contacts';
 import generateMessages from '../mocks/messages';
 
@@ -16,8 +16,9 @@ import generateMessages from '../mocks/messages';
 function Chats({ navigation }) {
   const user = useSelector((state) => state.user);
   const { inbox, contacts } = user;
+
+  const [loading, setLoading] = useState(null);
   // generateMessages(user.seed, 5);
-  const { showActionSheetWithOptions } = useActionSheet();
 
   function onNew() {
     navigation.navigate('NewMessage');
@@ -40,8 +41,11 @@ function Chats({ navigation }) {
     return recipient;
   }
 
-  function onChat(chat) {
-    navigation.navigate('Chat', { address: chat.with });
+  async function onChat(chat) {
+    setLoading(chat.with);
+    const conversation = await db.getConv(user.address, chat.with);
+    navigation.navigate('Chat', { address: chat.with, conversation });
+    setLoading(null);
   }
 
   return (
@@ -56,7 +60,12 @@ function Chats({ navigation }) {
         <View style={{ marginTop: 20 }} />
         {/* <TextInput style={styles.searchInput} placeholder="Search in your chats" /> */}
         {inbox.map((c) => (
-          <TouchableOpacity key={c.with} style={styles.contact} onPress={() => onChat(c)}>
+          <TouchableOpacity
+            key={c.with}
+            style={styles.contact}
+            disabled={!!loading}
+            onPress={() => onChat(c)}
+          >
             <Identicon value={c.with} size={70} />
             <View style={styles.id}>
               <Text style={styles.contactName}>{recipientName(c.with)}</Text>
@@ -64,7 +73,11 @@ function Chats({ navigation }) {
               <Text style={styles.contactContent} numberOfLines={2}>{c.last.encoded}</Text>
             </View>
             <View style={styles.chevronContainer}>
-              <MaterialIcons name="chevron-right" size={24} color="#666464" />
+              {loading === c.with ? (
+                <ActivityIndicator size="small" color="#666464" />
+              ) : (
+                <MaterialIcons name="chevron-right" size={24} color="#666464" />
+              )}
             </View>
           </TouchableOpacity>
         ))}

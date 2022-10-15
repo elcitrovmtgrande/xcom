@@ -25,7 +25,7 @@ function BottomTabs() {
         ),
         tabBarActiveTintColor: 'black',
       }}
-      initialRouteName="Contacts"
+      initialRouteName="Inbox"
     >
       <Tab.Screen
         name="Inbox"

@@ -143,6 +143,20 @@ class Database {
       );
     });
   }
+
+  getConv(addr1, addr2) {
+    return new Promise((fnResolve, fnReject) => {
+      this.db.transaction(
+        (tx) => {
+          tx.executeSql('SELECT * FROM chats WHERE (recipient = ? AND sender = ?) OR (recipient = ? AND sender = ?) ORDER BY sentAt DESC', [
+            addr1, addr2, addr2, addr1,
+          ], (_, { rows }) => {
+            fnResolve(rows._array);
+          });
+        },
+      );
+    });
+  }
 }
 
 const db = new Database();
