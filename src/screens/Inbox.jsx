@@ -3,6 +3,7 @@ import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,
   TextInput,
 } from 'react-native';
+import moment from 'moment';
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useSelector } from 'react-redux';
@@ -10,10 +11,11 @@ import Identicon from '@polkadot/reactnative-identicon';
 import generateContacts from '../mocks/contacts';
 import generateMessages from '../mocks/messages';
 
-const contacts = generateContacts(30);
+// const contacts = generateContacts(30);
 
 function Chats({ navigation }) {
-  // const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
+  const { inbox, contacts } = user;
   // generateMessages(user.seed, 5);
   const { showActionSheetWithOptions } = useActionSheet();
 
@@ -60,6 +62,13 @@ function Chats({ navigation }) {
   //   console.log(u8aToHex(decodeAddress(keypair.address)));
   // }
 
+  function recipientName(recipientAddress) {
+    const contact = contacts.find((c) => c.address === recipientAddress);
+    const isInContact = !!contact;
+    const recipient = isInContact ? contact.nickname : 'X';
+    return recipient;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} contentContainerStyle={{ paddingBottom: 60 }}>
@@ -69,13 +78,18 @@ function Chats({ navigation }) {
             <FontAwesome5 name="telegram-plane" size={24} color="white" />
           </TouchableOpacity>
         </View>
-        <TextInput style={styles.searchInput} placeholder="Search in your chats" />
-        {contacts.map((c) => (
-          <TouchableOpacity key={c.address} style={styles.contact} onPress={() => onContact(c)}>
-            <Identicon value={c.address} size={70} />
+        <View style={{ marginTop: 20 }} />
+        {/* <TextInput style={styles.searchInput} placeholder="Search in your chats" /> */}
+        {inbox.map((c) => (
+          <TouchableOpacity key={c.with} style={styles.contact} onPress={() => onContact(c)}>
+            <Identicon value={c.with} size={70} />
             <View style={styles.id}>
-              <Text style={styles.contactName}>{c.nickname}</Text>
-              <Text style={styles.contactPubKey}>{c.address}</Text>
+              <Text style={styles.contactName}>{recipientName(c.with)}</Text>
+              <Text style={styles.contactSentAt}>{moment(c.last.sentAt).format('LLL')}</Text>
+              <Text style={styles.contactContent} numberOfLines={2}>{c.last.encoded}</Text>
+            </View>
+            <View style={styles.chevronContainer}>
+              <MaterialIcons name="chevron-right" size={24} color="#666464" />
             </View>
           </TouchableOpacity>
         ))}
@@ -130,19 +144,37 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    width: '100%',
+    height: 100,
+    // backgroundColor: 'yellow',
   },
   contactName: {
     fontSize: 20,
     fontWeight: 'bold',
   },
-  contactPubKey: {
+  contactContent: {
     fontSize: 14,
     marginTop: 8,
     maxWidth: 300,
     color: '#666464',
   },
+  contactSentAt: {
+    fontSize: 14,
+    marginTop: 4,
+    maxWidth: '100%',
+    color: 'black',
+  },
   id: {
     marginLeft: 20,
+    flex: 1,
+  },
+  chevronContainer: {
+    height: '100%',
+    // backgroundColor: 'red',
+    width: 50,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: 16,
   },
 });
 

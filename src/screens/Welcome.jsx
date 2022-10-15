@@ -26,8 +26,8 @@ function Welcome({ navigation }) {
           publicKey: u8aToHex(keypair.publicKey),
         };
         u.contacts = await db.getContacts();
+        u.inbox = await db.getMessages();
 
-        console.log('messages:', await db.getMessages());
         dispatch(updateUser(u));
       }
       navigation.navigate('InApp');

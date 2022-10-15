@@ -25,11 +25,12 @@ function generateMessages(userSeed, length) {
   for (let i = 0; i < length; i++) {
     const contact = sample(contacts);
     const content = faker.lorem.sentences(2);
+    const bIsSender = isSender();
 
     const message = {
       identifier: faker.datatype.uuid(),
-      sender: isSender() ? userPair.address : contact.address,
-      recipient: isSender() ? contact.address : userPair.address,
+      sender: bIsSender ? userPair.address : contact.address,
+      recipient: bIsSender ? contact.address : userPair.address,
       decoded: content,
       encoded: u8aToHex(userPair.encryptMessage(message, contact.contactPublicKey)),
       sentAt: faker.date.past().toJSON(),

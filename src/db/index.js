@@ -26,6 +26,19 @@ class Database {
     });
   }
 
+  clear() {
+    this.db.transaction((tx) => {
+      tx.executeSql(
+        'DELETE FROM contacts',
+      );
+    });
+    this.db.transaction((tx) => {
+      tx.executeSql(
+        'DELETE from chats',
+      );
+    });
+  }
+
   saveContact(contact) {
     const { address, nickname } = contact;
     return new Promise((fnResolve, fnReject) => {
@@ -86,7 +99,7 @@ class Database {
     return new Promise((fnResolve, fnReject) => {
       this.db.transaction(
         (tx) => {
-          tx.executeSql('SELECT * FROM chats', [], (_, { rows }) => {
+          tx.executeSql('SELECT * FROM chats ORDER BY sentAt DESC', [], (_, { rows }) => {
             fnResolve(rows._array);
           });
         },
