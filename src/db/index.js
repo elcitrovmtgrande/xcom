@@ -4,10 +4,10 @@ import * as SQLite from 'expo-sqlite';
 class Database {
   constructor() {
     this.db = SQLite.openDatabase('db.db');
-    this.initContactTable();
+    this.init();
   }
 
-  initContactTable() {
+  init() {
     return new Promise((fnResolve, fnReject) => {
       try {
         this.db.transaction((tx) => {
@@ -15,7 +15,11 @@ class Database {
             'CREATE TABLE IF NOT EXISTS contacts (address text primary key not null, nickname text);',
           );
         });
-        fnResolve(true);
+        this.db.transaction((tx) => {
+          tx.executeSql(
+            'CREATE TABLE IF NOT EXISTS chats (uuid text primary key not null, sender TEXT, recipient TEXT, encoded TEXT, decoded TEXT, sentAt TEXT, deliveredAt TEXT, readAt TEXT);',
+          );
+        });
       } catch (e) {
         fnReject();
       }
@@ -74,6 +78,18 @@ class Database {
         },
         null,
         () => {}, // forceUpdate f(x)
+      );
+    });
+  }
+
+  getMessages() {
+    return new Promise((fnResolve, fnReject) => {
+      this.db.transaction(
+        (tx) => {
+          tx.executeSql('SELECT * FROM chats', [], (_, { rows }) => {
+            fnResolve(rows._array);
+          });
+        },
       );
     });
   }
