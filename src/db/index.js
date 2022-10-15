@@ -63,6 +63,20 @@ class Database {
       );
     });
   }
+
+  deleteContact(contact) {
+    const { address } = contact;
+    return new Promise((fnResolve, fnReject) => {
+      this.db.transaction(
+        (tx) => {
+          tx.executeSql(`DELETE FROM contacts WHERE address = '${address}'`, [], () => fnResolve);
+          fnResolve();
+        },
+        null,
+        () => {}, // forceUpdate f(x)
+      );
+    });
+  }
 }
 
 const db = new Database();

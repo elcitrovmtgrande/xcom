@@ -3,25 +3,12 @@ import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView,
   TextInput,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import {
-  mnemonicGenerate,
-  mnemonicToMiniSecret,
-  mnemonicValidate,
-  ed25519PairFromSecret,
-  decodeAddress,
-} from '@polkadot/util-crypto';
-
-import { Keyring } from '@polkadot/keyring';
-
-import { stringToU8a, u8aToHex, u8aToString } from '@polkadot/util';
 import Identicon from '@polkadot/reactnative-identicon';
-// import generateContacts from '../mocks/contacts';
-
-// const contacts = generateContacts(30);
-// console.log(JSON.stringify(contacts));
+import db from '../db';
+import { updateContacts } from '../store/features/userSlice';
 
 function Contacts({ navigation }) {
   const contacts = useSelector((state) => state.user.contacts);
@@ -29,9 +16,16 @@ function Contacts({ navigation }) {
   const [filter, setFilter] = useState('');
 
   const { showActionSheetWithOptions } = useActionSheet();
+  const dispatch = useDispatch();
 
   function onNew() {
     navigation.navigate('AddContact');
+  }
+
+  async function deleteContact(contact) {
+    await db.deleteContact(contact);
+    const nextContacts = await db.getContacts();
+    dispatch(updateContacts(nextContacts));
   }
 
   function onContact(contact) {
@@ -55,6 +49,7 @@ function Contacts({ navigation }) {
 
         case destructiveButtonIndex:
           // Delete
+          deleteContact(contact);
           break;
 
         case cancelButtonIndex:
