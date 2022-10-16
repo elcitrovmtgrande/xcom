@@ -1,15 +1,17 @@
 /* eslint-disable react/style-prop-object */
 import React from 'react';
 import {
-  View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity,
+  View, Text, StyleSheet, SafeAreaView,
+  TextInput, TouchableOpacity, ScrollView, Dimensions,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { StatusBar } from 'expo-status-bar';
 import Identicon from '@polkadot/reactnative-identicon';
 import { useSelector } from 'react-redux';
+import { FontAwesome5 } from '@expo/vector-icons';
 
-function Chat({ navigation, route }) {
-  const { address } = route.params;
+function Chat({ route }) {
+  const { address, conversation } = route.params;
 
   const user = useSelector((state) => state.user);
   const { contacts } = user;
@@ -25,7 +27,7 @@ function Chat({ navigation, route }) {
     <>
       <StatusBar style="light" />
       <View style={styles.container}>
-        <BlurView style={styles.header}>
+        {/* <BlurView intensity={100} style={styles.header}>
           <SafeAreaView style={styles.safe}>
             <Identicon value={address} size={50} />
             <View style={styles.contact}>
@@ -33,20 +35,56 @@ function Chat({ navigation, route }) {
               <Text style={styles.contactAddr}>{address}</Text>
             </View>
           </SafeAreaView>
-        </BlurView>
-
-        {/* {} */}
-
-        <BlurView style={styles.footer}>
+        </BlurView> */}
+        <View style={styles.listWrapper}>
+          <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
+            {conversation.map((message) => {
+              const isSender = message.sender === user.address;
+              return (
+                <View
+                  key={message.identifier}
+                  style={[
+                    styles.msgRow,
+                    isSender && styles.msgRowSender,
+                  ]}
+                >
+                  <View style={[styles.msg, isSender && styles.msgSender]}>
+                    <Text style={styles.msgContent}>
+                      {message.decoded}
+                    </Text>
+                  </View>
+                </View>
+              );
+            })}
+          </ScrollView>
+        </View>
+        <View style={styles.headerContainer}>
+          <BlurView
+            tint="light"
+            intensity={50}
+            style={{
+              paddingLeft: 40,
+              paddingRight: 40,
+              paddingBottom: 20,
+            }}
+          >
+            <SafeAreaView style={styles.safe}>
+              <Identicon value={address} size={50} />
+              <View style={styles.contact}>
+                <Text style={styles.contactName}>{recipientName(address)}</Text>
+                <Text style={styles.contactAddr}>{address}</Text>
+              </View>
+            </SafeAreaView>
+          </BlurView>
+        </View>
+        <View style={styles.bottomContainer}>
           <SafeAreaView style={styles.safe}>
             <TextInput placeholder="Enjoy privacy..." style={styles.input} />
-            <TouchableOpacity style={styles.submit}>
-              <Text>u</Text>
+            <TouchableOpacity style={styles.send}>
+              <FontAwesome5 name="telegram-plane" size={24} color="#00052B" />
             </TouchableOpacity>
           </SafeAreaView>
-        </BlurView>
-
-        <Text>/chat</Text>
+        </View>
       </View>
     </>
   );
@@ -59,25 +97,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#00052B',
   },
-  header: {
-    width: '100%',
-    position: 'absolute',
-    top: 0,
-    paddingLeft: 40,
-    paddingBottom: 20,
-    paddingRight: 40,
-  },
-  footer: {
-    width: '100%',
-    position: 'absolute',
-    bottom: 0,
+  input: {
+    flex: 1,
+    height: 50,
+    borderRadius: 10,
+    backgroundColor: '#E3E3E3',
     paddingLeft: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
     paddingRight: 20,
+  },
+  send: {
+    width: 50,
+    height: 50,
+    backgroundColor: '#E3E3E3',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 10,
   },
   safe: {
     width: '100%',
+    backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -96,16 +135,6 @@ const styles = StyleSheet.create({
     width: 200,
     marginTop: 6,
   },
-  input: {
-    flex: 1,
-    height: 50,
-    backgroundColor: '#E3E3E3',
-    borderRadius: 10,
-    marginRight: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
-    fontSize: 12,
-  },
   submit: {
     width: 50,
     height: 50,
@@ -114,8 +143,53 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  list: {
+    width: '100%',
+    height: Dimensions.get('window').height,
+    flexDirection: 'column-reverse',
+  },
+  listWrapper: {
+    width: '100%', minHeight: '100%', justifyContent: 'flex-end',
+  },
+  listContentContainer: {
+    // paddingTop: 100,
+    // paddingBottom: 200,
+  },
+  scrollViewContentContainer: {
+    paddingTop: 140, paddingBottom: 100, justifyContent: 'flex-end',
+  },
   msgRow: {
     width: '100%',
+  },
+  msgRowSender: {
+    width: '100%',
+    alignItems: 'flex-end',
+  },
+  msg: {
+    padding: 20,
+    backgroundColor: '#C0E1FF',
+    width: 300,
+    marginLeft: 20,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  msgSender: {
+    backgroundColor: '#006FD6',
+  },
+  headerContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+  bottomContainer: {
+    position: 'absolute',
+    zIndex: 1,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingLeft: 40,
+    paddingRight: 40,
   },
 });
 

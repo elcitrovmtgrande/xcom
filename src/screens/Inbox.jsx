@@ -18,7 +18,7 @@ function Chats({ navigation }) {
   const { inbox, contacts } = user;
 
   const [loading, setLoading] = useState(null);
-  // generateMessages(user.seed, 5);
+  // generateMessages(user.seed, 10);
 
   function onNew() {
     navigation.navigate('NewMessage');
@@ -44,8 +44,8 @@ function Chats({ navigation }) {
   async function onChat(chat) {
     setLoading(chat.with);
     const conversation = await db.getConv(user.address, chat.with);
-    navigation.navigate('Chat', { address: chat.with, conversation });
     setLoading(null);
+    navigation.navigate('Chat', { address: chat.with, conversation });
   }
 
   return (

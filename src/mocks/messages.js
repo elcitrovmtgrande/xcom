@@ -45,8 +45,8 @@ function generateMessages(userSeed, length) {
   // + Recuperer les messages du user de puis la DB sur la session de welcome
   // |
   // v
-  // contacts.forEach((c) => db.saveContact(c));
-  // messages.forEach((m) => db.saveMessage(m));
+  contacts.forEach((c) => db.saveContact(c));
+  messages.forEach((m) => db.saveMessage(m));
 
   return messages;
 }
