@@ -1,5 +1,5 @@
 /* eslint-disable react/style-prop-object */
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, SafeAreaView,
   TextInput, TouchableOpacity, ScrollView, Dimensions,
@@ -8,19 +8,24 @@ import { BlurView } from 'expo-blur';
 import { StatusBar } from 'expo-status-bar';
 import Identicon from '@polkadot/reactnative-identicon';
 import { useSelector } from 'react-redux';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
 function Chat({ route }) {
   const { address, conversation } = route.params;
-
   const user = useSelector((state) => state.user);
   const { contacts } = user;
+
+  const [lock, setLock] = useState(false);
 
   function recipientName(recipientAddress) {
     const contact = contacts.find((c) => c.address === recipientAddress);
     const isInContact = !!contact;
     const recipient = isInContact ? contact.nickname : 'X';
     return recipient;
+  }
+
+  function lockToggle() {
+    setLock(!lock);
   }
 
   return (
@@ -50,7 +55,7 @@ function Chat({ route }) {
                 >
                   <View style={[styles.msg, isSender && styles.msgSender]}>
                     <Text style={styles.msgContent}>
-                      {message.decoded}
+                      {lock ? message.encoded : message.decoded}
                     </Text>
                   </View>
                 </View>
@@ -69,11 +74,20 @@ function Chat({ route }) {
             }}
           >
             <SafeAreaView style={styles.safe}>
-              <Identicon value={address} size={50} />
-              <View style={styles.contact}>
-                <Text style={styles.contactName}>{recipientName(address)}</Text>
-                <Text style={styles.contactAddr}>{address}</Text>
+              <View style={styles.headerLeft}>
+                <Identicon value={address} size={50} />
+                <View style={styles.contact}>
+                  <Text style={styles.contactName}>{recipientName(address)}</Text>
+                  <Text style={styles.contactAddr}>{address}</Text>
+                </View>
               </View>
+              <TouchableOpacity onPress={lockToggle}>
+                {lock ? (
+                  <MaterialCommunityIcons name="lock" size={30} color="white" />
+                ) : (
+                  <MaterialCommunityIcons name="lock-open" size={30} color="white" />
+                )}
+              </TouchableOpacity>
             </SafeAreaView>
           </BlurView>
         </View>
@@ -97,6 +111,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#00052B',
   },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
   input: {
     flex: 1,
     height: 50,
@@ -119,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
   },
   contact: {
     marginLeft: 20,
