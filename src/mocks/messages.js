@@ -13,8 +13,8 @@ import db from '../db';
  * @param {Number} length Number of messages you wanna generate
  * @returns
  */
-function generateMessages(userSeed, length) {
-  const userPair = keypairFromSeed(userSeed);
+async function generateMessages(userSeed, length) {
+  const userPair = await keypairFromSeed(userSeed);
   // Generation de contacts
   const contacts = generateContacts(2);
   const messages = [];

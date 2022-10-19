@@ -14,7 +14,6 @@ const Tab = createBottomTabNavigator();
 
 function BottomTabs() {
   const user = useSelector((state) => state.user);
-  const { address } = user;
 
   return (
     <Tab.Navigator

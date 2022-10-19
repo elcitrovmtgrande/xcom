@@ -19,7 +19,7 @@ function Welcome({ navigation }) {
     async function session() {
       const seed = await SecureStore.getItemAsync('seedphrase');
       if (seed) {
-        const keypair = keypairFromSeed(seed);
+        const keypair = await keypairFromSeed(seed);
         const u = {
           seed,
           address: keypair.address,

@@ -10,7 +10,7 @@ import { StatusBar } from 'expo-status-bar';
 import Identicon from '@polkadot/reactnative-identicon';
 import { useSelector } from 'react-redux';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { getPubKeyFromAddress } from '../utils/tools';
+import { getPubKeyFromAddress, encryptMessage, keypairFromSeed } from '../utils/tools';
 
 function Chat({ route }) {
   const { address, conversation } = route.params;
@@ -19,6 +19,7 @@ function Chat({ route }) {
 
   const [lock, setLock] = useState(false);
   const [sendLoading, setSendLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
   function recipientName(recipientAddress) {
     const contact = contacts.find((c) => c.address === recipientAddress);
@@ -33,7 +34,11 @@ function Chat({ route }) {
 
   async function sendMessage() {
     // 1) Encryption du message avec la cle publique du destinataire
-    const recipientPublicKey = getPubKeyFromAddress(address);
+    const userPair = await keypairFromSeed(user.seed);
+    const recipientPubKey = getPubKeyFromAddress(address);
+    const encrypted = encryptMessage({ senderPair: userPair, message, recipientPubKey });
+
+    console.log(encrypted);
     // 2) Stockage en localDB d'un nouveau message
     // 3) Mise à jour du store
     // 4) Envoi du message via Internet
@@ -90,7 +95,7 @@ function Chat({ route }) {
             );
           }}
           keyExtractor={(item) => item.identifier}
-          // extraData={selectedId}
+        // extraData={selectedId}
         />
         <View style={styles.headerContainer}>
           <BlurView
@@ -122,8 +127,14 @@ function Chat({ route }) {
         </View>
         <KeyboardAvoidingView style={styles.bottomContainer} behavior="padding">
           <SafeAreaView style={styles.safe}>
-            <TextInput placeholder="Enjoy privacy..." style={styles.input} multiline />
-            <TouchableOpacity style={styles.send}>
+            <TextInput
+              value={message}
+              multiline
+              placeholder="Enjoy privacy..."
+              style={styles.input}
+              onChangeText={setMessage}
+            />
+            <TouchableOpacity style={styles.send} onPress={sendMessage}>
               {sendLoading ? (
                 <ActivityIndicator size="large" color="#00052B" />
               ) : (
