@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, SafeAreaView,
-  TextInput, TouchableOpacity, ScrollView, Dimensions,
+  TextInput, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView, FlatList,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { StatusBar } from 'expo-status-bar';
@@ -32,16 +32,7 @@ function Chat({ route }) {
     <>
       <StatusBar style="light" />
       <View style={styles.container}>
-        {/* <BlurView intensity={100} style={styles.header}>
-          <SafeAreaView style={styles.safe}>
-            <Identicon value={address} size={50} />
-            <View style={styles.contact}>
-              <Text style={styles.contactName}>{recipientName(address)}</Text>
-              <Text style={styles.contactAddr}>{address}</Text>
-            </View>
-          </SafeAreaView>
-        </BlurView> */}
-        <View style={styles.listWrapper}>
+        {/* <View style={styles.listWrapper}>
           <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
             {conversation.map((message) => {
               const isSender = message.sender === user.address;
@@ -62,7 +53,33 @@ function Chat({ route }) {
               );
             })}
           </ScrollView>
-        </View>
+        </View> */}
+        <FlatList
+          style={styles.listWrapper}
+          contentContainerStyle={styles.scrollViewContentContainer}
+          data={conversation}
+          renderItem={({ item }) => {
+            const isSender = item.sender === user.address;
+
+            return (
+              <View
+                key={item.identifier}
+                style={[
+                  styles.msgRow,
+                  isSender && styles.msgRowSender,
+                ]}
+              >
+                <View style={[styles.msg, isSender && styles.msgSender]}>
+                  <Text style={styles.msgContent}>
+                    {lock ? item.encoded : item.decoded}
+                  </Text>
+                </View>
+              </View>
+            );
+          }}
+          keyExtractor={(item) => item.identifier}
+          // extraData={selectedId}
+        />
         <View style={styles.headerContainer}>
           <BlurView
             tint="light"
@@ -91,14 +108,14 @@ function Chat({ route }) {
             </SafeAreaView>
           </BlurView>
         </View>
-        <View style={styles.bottomContainer}>
+        <KeyboardAvoidingView style={styles.bottomContainer} behavior="padding">
           <SafeAreaView style={styles.safe}>
             <TextInput placeholder="Enjoy privacy..." style={styles.input} />
             <TouchableOpacity style={styles.send}>
               <FontAwesome5 name="telegram-plane" size={24} color="#00052B" />
             </TouchableOpacity>
           </SafeAreaView>
-        </View>
+        </KeyboardAvoidingView>
       </View>
     </>
   );
@@ -123,6 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E3E3E3',
     paddingLeft: 20,
     paddingRight: 20,
+    marginBottom: 10,
   },
   send: {
     width: 50,
@@ -132,6 +150,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 10,
+    marginBottom: 10,
   },
   safe: {
     width: '100%',
@@ -168,14 +187,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column-reverse',
   },
   listWrapper: {
-    width: '100%', minHeight: '100%', justifyContent: 'flex-end',
+    width: '100%', flex: 1,
   },
   listContentContainer: {
     // paddingTop: 100,
     // paddingBottom: 200,
   },
   scrollViewContentContainer: {
-    paddingTop: 140, paddingBottom: 100, justifyContent: 'flex-end',
+    paddingTop: 140,
+    // paddingBottom: ,
+    justifyContent: 'flex-end',
+    paddingRight: 20,
   },
   msgRow: {
     width: '100%',
@@ -202,13 +224,11 @@ const styles = StyleSheet.create({
     right: 0,
   },
   bottomContainer: {
-    position: 'absolute',
-    zIndex: 1,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingLeft: 40,
-    paddingRight: 40,
+    paddingTop: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 20,
+    backgroundColor: '#636585',
   },
 });
 
