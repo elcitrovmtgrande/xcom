@@ -4,7 +4,7 @@ import {
   mnemonicGenerate,
   cryptoWaitReady,
 } from '@polkadot/util-crypto';
-import { u8aToHex, u8aToString } from '@polkadot/util';
+import { u8aToHex } from '@polkadot/util';
 import { getPubKeyFromAddress, encryptMessage, decryptMessage } from '../src/utils/tools';
 
 describe('Crypto tools', () => {

@@ -1,4 +1,3 @@
-/* eslint-disable react/style-prop-object */
 import React, { useState, useRef, useEffect } from 'react';
 import {
   View, Text, StyleSheet, SafeAreaView,
@@ -33,6 +32,10 @@ function Chat({ route }) {
     }, 200);
   }, []);
 
+  useEffect(() => {
+      flatList.current?.scrollToEnd();
+  }, [messages]);
+
   function recipientName(recipientAddress: string) {
     const contact = contacts.find((c: Contact) => c.address === recipientAddress);
     const isInContact = !!contact;
@@ -66,7 +69,7 @@ function Chat({ route }) {
     // TODO: Save dans la base
 
     // 3) Mise à jour de la conversation
-    const nextMessages = cloneDeep(conversation);
+    const nextMessages = cloneDeep(messages);
     nextMessages.push(msg);
     setMessages(nextMessages);
     setMessage('');
@@ -85,6 +88,7 @@ function Chat({ route }) {
           style={styles.listWrapper}
           contentContainerStyle={styles.scrollViewContentContainer}
           data={messages}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
             const isSender = item.sender === user.address;
 
@@ -249,7 +253,7 @@ const styles = StyleSheet.create({
   msg: {
     padding: 20,
     backgroundColor: '#C0E1FF',
-    width: 300,
+    maxWidth: 300,
     marginLeft: 20,
     borderRadius: 10,
     marginBottom: 10,
