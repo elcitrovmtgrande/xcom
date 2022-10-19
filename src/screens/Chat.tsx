@@ -8,17 +8,21 @@ import {
 import { BlurView } from 'expo-blur';
 import { StatusBar } from 'expo-status-bar';
 import Identicon from '@polkadot/reactnative-identicon';
+import cloneDeep from 'lodash/cloneDeep';
+import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { getPubKeyFromAddress, encryptMessage, keypairFromSeed } from '../utils/tools';
+import { getPubKeyFromAddress, encryptMessage, keypairFromSeed, identifier } from '../utils/tools';
+import { Message } from '../types';
 
 function Chat({ route }) {
   const { address, conversation } = route.params;
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state: any) => state.user);
   const { contacts } = user;
 
   const [lock, setLock] = useState(false);
   const [sendLoading, setSendLoading] = useState(false);
+  const [messages, setMessages] = useState(conversation);
   const [message, setMessage] = useState('');
 
   function recipientName(recipientAddress) {
@@ -33,16 +37,36 @@ function Chat({ route }) {
   }
 
   async function sendMessage() {
+    setSendLoading(true);
     // 1) Encryption du message avec la cle publique du destinataire
     const userPair = await keypairFromSeed(user.seed);
     const recipientPubKey = getPubKeyFromAddress(address);
     const encrypted = encryptMessage({ senderPair: userPair, message, recipientPubKey });
 
-    console.log(encrypted);
     // 2) Stockage en localDB d'un nouveau message
-    // 3) Mise à jour du store
+    const msg: Message = {
+      identifier: identifier(),
+      sender: user.address,
+      recipient: address,
+      decoded: message,
+      encoded: encrypted,
+      writtenAt: moment().toJSON(),
+      sentAt: null,
+      deliveredAt: null,
+      readAt: null,
+    };
+    // TODO: Save dans la base
+
+    // 3) Mise à jour de la conversation
+    const nextMessages = cloneDeep(conversation);
+    nextMessages.push(msg);
+    setMessages(nextMessages);
+
+    setSendLoading(false);
+
     // 4) Envoi du message via Internet
-    // 5) Sur le succès mise à jour du sentAt eb DB et dans le store
+    // TODO
+    // 5) Sur le succès mise à jour du sentAt en DB et dans le state
   }
 
   return (
@@ -74,7 +98,7 @@ function Chat({ route }) {
         <FlatList
           style={styles.listWrapper}
           contentContainerStyle={styles.scrollViewContentContainer}
-          data={conversation}
+          data={messages}
           renderItem={({ item }) => {
             const isSender = item.sender === user.address;
 
@@ -134,9 +158,9 @@ function Chat({ route }) {
               style={styles.input}
               onChangeText={setMessage}
             />
-            <TouchableOpacity style={styles.send} onPress={sendMessage}>
+            <TouchableOpacity style={styles.send} onPress={sendMessage} disabled={sendLoading}>
               {sendLoading ? (
-                <ActivityIndicator size="large" color="#00052B" />
+                <ActivityIndicator size="small" color="#00052B" />
               ) : (
                 <FontAwesome5 name="telegram-plane" size={24} color="#00052B" />
               )}
@@ -259,6 +283,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     backgroundColor: '#636585',
   },
+  msgContent: {}
 });
 
 export default Chat;

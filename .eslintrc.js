@@ -7,6 +7,13 @@ module.exports = {
     'plugin:react/recommended',
     'airbnb',
   ],
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+    },
+  },
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -23,5 +30,15 @@ module.exports = {
     'react/jsx-no-bind': 0,
     'react/prop-types': 0,
     'no-unused-vars': 1,
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
   },
 };

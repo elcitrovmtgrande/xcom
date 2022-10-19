@@ -9,16 +9,16 @@ import { useSelector } from 'react-redux';
 import Identicon from '@polkadot/reactnative-identicon';
 import db from '../db';
 import generateContacts from '../mocks/contacts';
-import generateMessages from '../mocks/messages';
+// import generateMessages from '../mocks/messages';
 
-// const contacts = generateContacts(30);
+const contacts = generateContacts(30);
 
 function Chats({ navigation }) {
-  const user = useSelector((state) => state.user);
-  const { inbox, contacts } = user;
+  const user = useSelector((state: any) => state.user);
+  const { inbox , contacts } = user;
 
   const [loading, setLoading] = useState(null);
-  // generateMessages(user.seed, 10);
+  // generateMessages(user.seed, 20);
 
   function onNew() {
     navigation.navigate('NewMessage');

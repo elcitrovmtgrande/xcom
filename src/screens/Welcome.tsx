@@ -24,9 +24,9 @@ function Welcome({ navigation }) {
           seed,
           address: keypair.address,
           publicKey: u8aToHex(keypair.publicKey),
+          contacts: await db.getContacts(),
+          inbox: await db.getMessages(),
         };
-        u.contacts = await db.getContacts();
-        u.inbox = await db.getMessages();
 
         dispatch(updateUser(u));
       }

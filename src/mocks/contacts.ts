@@ -5,9 +5,10 @@ import {
 } from '@polkadot/util-crypto';
 
 import { Keyring } from '@polkadot/keyring';
+import { Contact } from '../types';
 
-function generateContacts(length) {
-  const contacts = [];
+function generateContacts(length: number) {
+  const contacts: Array<Contact> = [];
 
   // eslint-disable-next-line no-plusplus
   for (let i = 0; i < length; i++) {

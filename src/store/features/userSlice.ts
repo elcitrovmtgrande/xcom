@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 import formatter from '../../utils/formatter';
+import {  UserState, Conversation } from '../../types';
 
 export const userSlice = createSlice({
   name: 'counter',
@@ -9,7 +10,7 @@ export const userSlice = createSlice({
     address: '',
     publicKey: '',
     contacts: [],
-    inbox: [],
+    inbox: [] as any,
   },
   reducers: {
     updateUser: (state, action) => {

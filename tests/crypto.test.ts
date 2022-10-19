@@ -26,10 +26,10 @@ describe('Crypto tools', () => {
 
       const message = 'Mon merveilleux message';
 
-      const encrypted = u8aToHex(senderPair.encryptMessage(message, recipient.publicKey));
-      const decrypted = recipientPair.decryptMessage(encrypted);
+      // const encrypted = u8aToHex(senderPair.encryptMessage(message, recipient.publicKey));
+      // const decrypted = recipientPair.decryptMessage(encrypted);
 
-      expect(message).toBe(u8aToString(decrypted));
+      // expect(message).toBe(u8aToString(decrypted));
 
       expect(message).toBe(decryptMessage({
         recipientPair,

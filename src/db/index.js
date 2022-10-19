@@ -3,7 +3,7 @@ import * as SQLite from 'expo-sqlite';
 
 class Database {
   constructor() {
-    this.db = SQLite.openDatabase('test.db');
+    this.db = SQLite.openDatabase('user.db');
     this.init();
   }
 
@@ -17,7 +17,7 @@ class Database {
         });
         this.db.transaction((tx) => {
           tx.executeSql(
-            'CREATE TABLE IF NOT EXISTS chats (identifier TEXT PRIMARY KEY NOT NULL, sender TEXT, recipient TEXT, encoded TEXT, decoded TEXT, sentAt TEXT, deliveredAt TEXT, readAt TEXT);',
+            'CREATE TABLE IF NOT EXISTS chats (identifier TEXT PRIMARY KEY NOT NULL, sender TEXT, recipient TEXT, encoded TEXT, decoded TEXT, writtenAt TEXT, sentAt TEXT, deliveredAt TEXT, readAt TEXT);',
           );
         });
       } catch (e) {
@@ -122,13 +122,13 @@ class Database {
 
   saveMessage(message) {
     const {
-      identifier, sender, recipient, encoded, decoded, sentAt, deliveredAt, readAt,
+      identifier, sender, recipient, encoded, decoded, writtenAt, sentAt, deliveredAt, readAt,
     } = message;
     return new Promise((fnResolve, fnReject) => {
       this.db.transaction(
         (tx) => {
-          tx.executeSql('INSERT INTO chats (identifier, sender, recipient, encoded, decoded, sentAt, deliveredAt, readAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
-            identifier, sender, recipient, encoded, decoded, sentAt, deliveredAt, readAt,
+          tx.executeSql('INSERT INTO chats (identifier, sender, recipient, encoded, decoded, writtenAt, sentAt, deliveredAt, readAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+            identifier, sender, recipient, encoded, decoded, writtenAt, sentAt, deliveredAt, readAt,
           ], () => {}, (error, err) => {
             console.log(error, err);
           });
@@ -148,7 +148,7 @@ class Database {
     return new Promise((fnResolve, fnReject) => {
       this.db.transaction(
         (tx) => {
-          tx.executeSql('SELECT * FROM chats WHERE (recipient = ? AND sender = ?) OR (recipient = ? AND sender = ?) ORDER BY sentAt DESC', [
+          tx.executeSql('SELECT * FROM chats WHERE (recipient = ? AND sender = ?) OR (recipient = ? AND sender = ?) ORDER BY writtenAt DESC', [
             addr1, addr2, addr2, addr1,
           ], (_, { rows }) => {
             fnResolve(rows._array);
