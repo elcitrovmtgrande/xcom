@@ -11,7 +11,7 @@ import db from '../db';
 import { updateContacts } from '../store/features/userSlice';
 
 function Contacts({ navigation }) {
-  const contacts = useSelector((state) => state.user.contacts);
+  const contacts = useSelector((state: any) => state.user.contacts);
 
   const [filter, setFilter] = useState('');
 

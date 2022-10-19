@@ -17,7 +17,7 @@ import Identicon from '@polkadot/reactnative-identicon';
 import Popup from '../utils/Popup';
 
 function Settings() {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state: any) => state.user);
   const { address, publicKey } = user;
 
   // async function keyringFx() {

@@ -1,7 +1,7 @@
 import Toast from 'react-native-root-toast';
 
 class Popup {
-  static message(message) {
+  static message(message: string): void {
     Toast.show(message, {
       duration: Toast.durations.LONG,
       position: -100,

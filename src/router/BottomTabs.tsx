@@ -13,7 +13,7 @@ import Contacts from '../screens/Contacts';
 const Tab = createBottomTabNavigator();
 
 function BottomTabs() {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state: any) => state.user);
 
   return (
     <Tab.Navigator
@@ -56,7 +56,6 @@ function BottomTabs() {
           tabBarIcon: ({ color, size }) => (
             <View style={[styles.pp, { borderColor: color }]}>
               <Identicon
-                style={styles.pp}
                 value={user.address}
                 size={size * 1.2}
               />

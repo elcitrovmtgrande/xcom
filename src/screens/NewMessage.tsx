@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
   },
+  top: {},
   scrollView: {
     width: '100%',
     paddingLeft: 20,

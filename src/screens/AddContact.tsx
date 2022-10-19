@@ -10,9 +10,10 @@ import { updateContacts } from '../store/features/userSlice';
 import db from '../db';
 import Popup from '../utils/Popup';
 import v from '../utils/validation';
+import { Contact } from '../types';
 
 function AddContact({ navigation, route }) {
-  const contacts = useSelector((state) => state.user.contacts);
+  const contacts = useSelector((state: any) => state.user.contacts);
   const initialContact = route?.params?.initialContact || null;
   const editMode = !!initialContact;
 
@@ -30,14 +31,14 @@ function AddContact({ navigation, route }) {
       Popup.message('Nickname gotta have at least a 2 chars length');
     } else if (!v.user.address(address)) {
       Popup.message('Address is invalid. Did you type it corrrectly ?');
-    } else if (contacts.find((c) => c.address === address)) {
+    } else if (contacts.find((c: Contact) => c.address === address)) {
       Popup.message('This address is already registered in your contacts.');
     } else {
       await db.saveContact({
         address,
         nickname,
       });
-      const updatedContacts = await db.getContacts();
+      const updatedContacts: Contact[] = await db.getContacts();
       dispatch(updateContacts(updatedContacts));
       navigation.goBack();
     }
@@ -136,6 +137,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
   },
+  top: {},
   scrollViewContainer: {
     height: '100%',
     justifyContent: 'space-between',

@@ -13,10 +13,10 @@ import {
 
 const v = {
   user: {
-    nickname(nickname) {
+    nickname(nickname: any): boolean {
       return typeof nickname === 'string' && nickname.length >= 2;
     },
-    address(address) {
+    address(address: any): boolean {
       try {
         encodeAddress(
           isHex(address)
