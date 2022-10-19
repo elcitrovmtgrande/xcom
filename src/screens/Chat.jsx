@@ -2,13 +2,15 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, SafeAreaView,
-  TextInput, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView, FlatList,
+  TextInput, TouchableOpacity, Dimensions,
+  KeyboardAvoidingView, FlatList, ActivityIndicator,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { StatusBar } from 'expo-status-bar';
 import Identicon from '@polkadot/reactnative-identicon';
 import { useSelector } from 'react-redux';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { } from '../utils/tools';
 
 function Chat({ route }) {
   const { address, conversation } = route.params;
@@ -16,6 +18,7 @@ function Chat({ route }) {
   const { contacts } = user;
 
   const [lock, setLock] = useState(false);
+  const [sendLoading, setSendLoading] = useState(false);
 
   function recipientName(recipientAddress) {
     const contact = contacts.find((c) => c.address === recipientAddress);
@@ -26,6 +29,15 @@ function Chat({ route }) {
 
   function lockToggle() {
     setLock(!lock);
+  }
+
+  async function sendMessage() {
+    // 1) Encryption du message avec la cle publique du destinataire
+
+    // 2) Stockage en localDB d'un nouveau message
+    // 3) Mise à jour du store
+    // 4) Envoi du message via Internet
+    // 5) Sur le succès mise à jour du sentAt eb DB et dans le store
   }
 
   return (
@@ -110,9 +122,13 @@ function Chat({ route }) {
         </View>
         <KeyboardAvoidingView style={styles.bottomContainer} behavior="padding">
           <SafeAreaView style={styles.safe}>
-            <TextInput placeholder="Enjoy privacy..." style={styles.input} />
+            <TextInput placeholder="Enjoy privacy..." style={styles.input} multiline />
             <TouchableOpacity style={styles.send}>
-              <FontAwesome5 name="telegram-plane" size={24} color="#00052B" />
+              {sendLoading ? (
+                <ActivityIndicator size="large" color="#00052B" />
+              ) : (
+                <FontAwesome5 name="telegram-plane" size={24} color="#00052B" />
+              )}
             </TouchableOpacity>
           </SafeAreaView>
         </KeyboardAvoidingView>
@@ -135,12 +151,14 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 50,
+    minHeight: 50,
     borderRadius: 10,
     backgroundColor: '#E3E3E3',
     paddingLeft: 20,
     paddingRight: 20,
     marginBottom: 10,
+    paddingTop: 16,
+    paddingBotton: 16,
   },
   send: {
     width: 50,
