@@ -1,5 +1,5 @@
 /* eslint-disable react/style-prop-object */
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View, Text, StyleSheet, SafeAreaView,
   TextInput, TouchableOpacity, Dimensions,
@@ -13,20 +13,28 @@ import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { getPubKeyFromAddress, encryptMessage, keypairFromSeed, identifier } from '../utils/tools';
-import { Message } from '../types';
+import { Contact, Message } from '../types';
 
 function Chat({ route }) {
   const { address, conversation } = route.params;
   const user = useSelector((state: any) => state.user);
   const { contacts } = user;
 
-  const [lock, setLock] = useState(false);
-  const [sendLoading, setSendLoading] = useState(false);
-  const [messages, setMessages] = useState(conversation);
-  const [message, setMessage] = useState('');
+  const [lock, setLock] = useState<boolean>(false);
+  const [sendLoading, setSendLoading] = useState<boolean>(false);
+  const [messages, setMessages] = useState<Message[]>(conversation || []);
+  const [message, setMessage] = useState<string>('');
 
-  function recipientName(recipientAddress) {
-    const contact = contacts.find((c) => c.address === recipientAddress);
+  const flatList = useRef<FlatList>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      flatList.current?.scrollToEnd();
+    }, 200);
+  }, []);
+
+  function recipientName(recipientAddress: string) {
+    const contact = contacts.find((c: Contact) => c.address === recipientAddress);
     const isInContact = !!contact;
     const recipient = isInContact ? contact.nickname : 'X';
     return recipient;
@@ -61,7 +69,7 @@ function Chat({ route }) {
     const nextMessages = cloneDeep(conversation);
     nextMessages.push(msg);
     setMessages(nextMessages);
-
+    setMessage('');
     setSendLoading(false);
 
     // 4) Envoi du message via Internet
@@ -73,28 +81,6 @@ function Chat({ route }) {
     <>
       <StatusBar style="light" />
       <View style={styles.container}>
-        {/* <View style={styles.listWrapper}>
-          <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
-            {conversation.map((message) => {
-              const isSender = message.sender === user.address;
-              return (
-                <View
-                  key={message.identifier}
-                  style={[
-                    styles.msgRow,
-                    isSender && styles.msgRowSender,
-                  ]}
-                >
-                  <View style={[styles.msg, isSender && styles.msgSender]}>
-                    <Text style={styles.msgContent}>
-                      {lock ? message.encoded : message.decoded}
-                    </Text>
-                  </View>
-                </View>
-              );
-            })}
-          </ScrollView>
-        </View> */}
         <FlatList
           style={styles.listWrapper}
           contentContainerStyle={styles.scrollViewContentContainer}
@@ -119,7 +105,8 @@ function Chat({ route }) {
             );
           }}
           keyExtractor={(item) => item.identifier}
-        // extraData={selectedId}
+          ref={flatList}
+          onContentSizeChange={() => flatList.current?.scrollToEnd()}
         />
         <View style={styles.headerContainer}>
           <BlurView

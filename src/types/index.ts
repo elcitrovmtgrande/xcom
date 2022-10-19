@@ -1,14 +1,14 @@
 
 type Message = {
-  identifier: String,
-  sender: String,
-  recipient: String,
-  decoded: String,
-  encoded: String,
-  writtenAt: String | null,
-  sentAt: String | null,
-  deliveredAt: String | null,
-  readAt: String | null,
+  identifier: string,
+  sender: string,
+  recipient: string,
+  decoded: string,
+  encoded: string,
+  writtenAt: string | null,
+  sentAt: string | null,
+  deliveredAt: string | null,
+  readAt: string | null,
 }
 
 type Contact = {
@@ -25,8 +25,8 @@ type UserState = {
   seed: string,
   address: string,
   publicKey: string,
-  contacts: Array<Contact>,
-  inbox: Array<Message>,
+  contacts: Contact[],
+  inbox: Message[],
 }
 
 
