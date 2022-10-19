@@ -10,7 +10,7 @@ import { StatusBar } from 'expo-status-bar';
 import Identicon from '@polkadot/reactnative-identicon';
 import { useSelector } from 'react-redux';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { } from '../utils/tools';
+import { getPubKeyFromAddress } from '../utils/tools';
 
 function Chat({ route }) {
   const { address, conversation } = route.params;
@@ -33,7 +33,7 @@ function Chat({ route }) {
 
   async function sendMessage() {
     // 1) Encryption du message avec la cle publique du destinataire
-
+    const recipientPublicKey = getPubKeyFromAddress(address);
     // 2) Stockage en localDB d'un nouveau message
     // 3) Mise à jour du store
     // 4) Envoi du message via Internet
