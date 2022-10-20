@@ -56,7 +56,7 @@ function Chat({ route }) {
 
     // 2) Stockage en localDB d'un nouveau message
     const msg: Message = {
-      identifier: identifier(),
+      identifier: identifier(user.address, address, encrypted),
       sender: user.address,
       recipient: address,
       decoded: message,
@@ -67,7 +67,6 @@ function Chat({ route }) {
       readAt: null,
     };
     // TODO: Save dans la base
-
     // 3) Mise à jour de la conversation
     const nextMessages = cloneDeep(messages);
     nextMessages.push(msg);

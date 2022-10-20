@@ -1,4 +1,3 @@
-
 type Message = {
   identifier: string,
   sender: string,
