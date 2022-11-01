@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     color: '#00052B',
     textTransform: 'uppercase',
     fontWeight: "900",
+    fontSize: 20,
   },
 });
 
