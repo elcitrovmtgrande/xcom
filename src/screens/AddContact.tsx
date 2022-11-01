@@ -4,13 +4,14 @@ import {
   TextInput,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import { updateContacts } from '../store/features/userSlice';
 import db from '../db';
 import Popup from '../utils/Popup';
 import v from '../utils/validation';
 import { Contact } from '../types';
+import { colors } from '../theme';
 
 function AddContact({ navigation, route }) {
   const contacts = useSelector((state: any) => state.user.contacts);
@@ -63,6 +64,13 @@ function AddContact({ navigation, route }) {
     }
   }
 
+  async function onPaste() {
+    // TODO
+    const addr = await Clipboard.getStringAsync();
+    setAddress(addr);
+    Popup.message('Pasted from clipboard');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
@@ -70,7 +78,7 @@ function AddContact({ navigation, route }) {
           <View style={styles.header}>
             <Text style={styles.title}>{initialContact ? 'Modify' : 'Add'}</Text>
             <TouchableOpacity style={styles.backBtn} onPress={onBack}>
-              <MaterialIcons name="arrow-downward" size={24} color="white" />
+              <MaterialIcons name="arrow-downward" size={24} color={colors.black} />
             </TouchableOpacity>
           </View>
           <Text style={styles.label}>Nickname</Text>
@@ -82,20 +90,26 @@ function AddContact({ navigation, route }) {
             <Text style={{ fontWeight: 'bold' }}>At least two chars. Spaces are not allowed</Text>
             .
           </Text>
-          <TextInput style={styles.textInput} placeholder="Nickname" value={nickname} onChangeText={setNickname} />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Nickname"
+            placeholderTextColor={colors.black}
+            value={nickname}
+            onChangeText={setNickname} />
           <Text style={styles.label}>Public address</Text>
           <Text style={styles.subLabel}>
             Ask for your contact his public address.
             He can easily find it on the main page of the app.
-            You can also either scan directly a
+            Then, you paste it directly using the
             {' '}
-            <Text style={{ fontWeight: 'bold' }}>QR Code</Text>
+            <Text style={{ fontWeight: 'bold' }}>paste button</Text>
             {' '}
-            or import a file containing a QR Code.
+            aside.
           </Text>
           <View style={styles.publicKeyRow}>
             <TextInput
-              style={[styles.pubKeyInput, editMode && { color: 'grey' }]}
+              style={[styles.pubKeyInput, editMode && { color: colors.black }]}
+              placeholderTextColor={colors.black}
               placeholder="Address"
               autoComplete="off"
               editable={!editMode}
@@ -107,8 +121,8 @@ function AddContact({ navigation, route }) {
                 <MaterialIcons name="content-copy" size={24} color="white" />
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity style={styles.qrCodeScan}>
-                <MaterialIcons name="qr-code" size={24} color="white" />
+              <TouchableOpacity style={styles.qrCodeScan} onPress={onPaste}>
+                <FontAwesome5 name="paste" size={24} color={colors.black} />
               </TouchableOpacity>
             )}
           </View>
@@ -126,7 +140,7 @@ function AddContact({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.black,
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 20,
@@ -149,36 +163,41 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   title: {
-    fontSize: 50,
-    fontWeight: 'bold',
-    color: 'black',
+    fontSize: 60,
+    fontWeight: '900',
+    color: colors.white,
+    lineHeight: 60,
   },
   backBtn: {
     width: 50,
     height: 50,
     borderRadius: 10,
-    backgroundColor: 'black',
+    backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },
   submitBtn: {
     width: '100%',
-    height: 50,
-    borderRadius: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    height: 60,
+    borderRadius: 8,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'black',
+    marginTop: 50,
   },
   submitBtnLabel: {
-    color: 'white',
+    color: colors.black,
     textTransform: 'uppercase',
-    fontWeight: 'bold',
+    fontWeight: "900",
+    fontSize: 20,
   },
   textInput: {
     width: '100%',
     height: 50,
     borderRadius: 10,
-    backgroundColor: '#F6F1F1',
+    backgroundColor: colors.compute('white', 60),
     paddingLeft: 20,
     marginTop: 20,
   },
@@ -186,10 +205,10 @@ const styles = StyleSheet.create({
     marginTop: 30,
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'black',
+    color: colors.white,
   },
   subLabel: {
-    color: '#666464',
+    color: colors.white,
     marginTop: 10,
   },
   publicKeyRow: {
@@ -203,14 +222,14 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 110,
     height: 50,
     borderRadius: 10,
-    backgroundColor: '#F6F1F1',
+    backgroundColor: colors.compute('white', 60),
     paddingLeft: 20,
   },
   qrCodeScan: {
     height: 50,
     width: 50,
     borderRadius: 10,
-    backgroundColor: 'black',
+    backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },

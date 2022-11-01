@@ -50,6 +50,10 @@ function Chats({ navigation }) {
     navigation.navigate('Chat', { address: chat.with, conversation });
   }
 
+  function onContacts() {
+    navigation.navigate('Contacts');
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} contentContainerStyle={{ paddingBottom: 60 }}>
@@ -86,7 +90,7 @@ function Chats({ navigation }) {
           <View style={styles.emptyBox}>
             <Text style={styles.emptyTitle}>Nothing <Text style={{ color: colors.primary }}>yet</Text>.</Text>
             <Text style={styles.emptySubtitle}>Ask your contacts their public address to chat with.</Text>
-            <TouchableOpacity style={styles.emptyBtn} onPress={() => { }}>
+            <TouchableOpacity style={styles.emptyBtn} onPress={onContacts}>
               <Text style={styles.emptyBtnText}>See my contacts</Text>
             </TouchableOpacity>
           </View>

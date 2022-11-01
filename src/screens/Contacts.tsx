@@ -9,6 +9,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import Identicon from '@polkadot/reactnative-identicon';
 import db from '../db';
 import { updateContacts } from '../store/features/userSlice';
+import { colors } from '../theme';
 
 function Contacts({ navigation }) {
   const contacts = useSelector((state: any) => state.user.contacts);
@@ -74,11 +75,12 @@ function Contacts({ navigation }) {
         <View style={styles.header}>
           <Text style={styles.title}>Contacts</Text>
           <TouchableOpacity style={styles.newBtn} onPress={onNew}>
-            <MaterialIcons name="person-add" size={24} color="white" />
+            <MaterialIcons name="person-add" size={24} color={colors.black} />
           </TouchableOpacity>
         </View>
         <TextInput
           style={styles.searchInput}
+          placeholderTextColor={colors.black}
           placeholder="Search in your contacts"
           onChangeText={setFilter}
         />
@@ -91,7 +93,9 @@ function Contacts({ navigation }) {
             <TouchableOpacity key={c.address} style={styles.contact} onPress={() => onContact(c)}>
               <Identicon value={c.address} size={70} />
               <View style={styles.id}>
-                <Text style={styles.contactName}>{c.nickname}</Text>
+                <View style={styles.contactNameContainer}>
+                  <Text style={styles.contactName}>{c.nickname}</Text>
+                </View>
                 <Text style={styles.contactPubKey}>{c.address}</Text>
               </View>
             </TouchableOpacity>
@@ -104,7 +108,7 @@ function Contacts({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.black,
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 20,
@@ -122,15 +126,16 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   title: {
-    fontSize: 50,
-    fontWeight: 'bold',
-    color: 'black',
+    fontSize: 60,
+    fontWeight: '900',
+    color: colors.white,
+    lineHeight: 60,
   },
   newBtn: {
     width: 50,
     height: 50,
     borderRadius: 10,
-    backgroundColor: 'black',
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -138,7 +143,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     borderRadius: 10,
-    backgroundColor: '#F6F1F1',
+    backgroundColor: colors.compute('white', 60),
     paddingLeft: 20,
     marginTop: 20,
   },
@@ -152,12 +157,13 @@ const styles = StyleSheet.create({
   contactName: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: colors.white,
   },
   contactPubKey: {
     fontSize: 14,
     marginTop: 8,
     maxWidth: 300,
-    color: '#666464',
+    color: colors.white,
   },
   id: {
     marginLeft: 20,
