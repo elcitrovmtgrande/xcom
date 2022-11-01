@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Identicon from '@polkadot/reactnative-identicon';
 import Popup from '../utils/Popup';
+import { colors } from '../theme';
 
 function Settings() {
   const user = useSelector((state: any) => state.user);
@@ -99,19 +100,19 @@ function Settings() {
         <View style={styles.valueRow}>
           <Text style={styles.value}>{address}</Text>
           <TouchableOpacity style={styles.copyBtn} onPress={onAddressCopy}>
-            <MaterialCommunityIcons name="content-copy" size={24} color="white" />
+            <MaterialCommunityIcons name="content-copy" size={24} color={colors.black} />
           </TouchableOpacity>
         </View>
-        <Text style={styles.label}>Your public key</Text>
+        {/* <Text style={styles.label}>Your public key</Text>
         <View style={styles.valueRow}>
           <Text style={styles.value}>{publicKey}</Text>
           <TouchableOpacity style={styles.copyBtn} onPress={onPublickeyCopy}>
             <MaterialCommunityIcons name="content-copy" size={24} color="white" />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
       <TouchableOpacity style={styles.signoutBtn}>
-        <Text style={styles.signoutLabel}>Sign out</Text>
+        <Text style={styles.signoutLabel}>Destroy session</Text>
       </TouchableOpacity>
     </View>
   );
@@ -120,7 +121,7 @@ function Settings() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.black,
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 20,
@@ -134,6 +135,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 40,
+    color: colors.white,
   },
   valueRow: {
     marginTop: 10,
@@ -144,27 +146,32 @@ const styles = StyleSheet.create({
   },
   value: {
     width: Dimensions.get('window').width - 140,
+    color: colors.white,
   },
   copyBtn: {
     width: 50,
     height: 50,
     borderRadius: 10,
-    backgroundColor: 'black',
+    backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },
   signoutBtn: {
     width: '100%',
-    height: 50,
-    borderRadius: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    height: 60,
+    borderRadius: 8,
+    backgroundColor: colors.red,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'black',
+    marginTop: 50,
   },
   signoutLabel: {
+    color: colors.black,
     textTransform: 'uppercase',
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "900",
+    fontSize: 20,
   },
 });
 

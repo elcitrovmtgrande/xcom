@@ -4,6 +4,7 @@ import {
   TextInput,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { colors } from '../theme';
 
 function NewMessage({ navigation, route }) {
   const initialContact = route?.params?.initialContact || null;
@@ -22,14 +23,20 @@ function NewMessage({ navigation, route }) {
           <View style={styles.header}>
             <Text style={styles.title}>Write</Text>
             <TouchableOpacity style={styles.backBtn} onPress={onBack}>
-              <MaterialIcons name="arrow-downward" size={24} color="white" />
+              <MaterialIcons name="arrow-downward" size={24} color={colors.black} />
             </TouchableOpacity>
           </View>
           <Text style={styles.label}>To</Text>
-          <TextInput style={styles.textInput} placeholder="Search by nickname" value={nickname} onChangeText={setNickname} />
+          <TextInput
+            style={styles.textInput}
+            placeholder="Search by nickname"
+            placeholderTextColor={colors.black}
+            value={nickname}
+            onChangeText={setNickname} />
           <Text style={styles.label}>Content</Text>
           <TextInput
             style={styles.contentInput}
+            placeholderTextColor={colors.black}
             placeholder="What does matter today ?"
             value={content}
             onChangeText={setContent}
@@ -46,7 +53,7 @@ function NewMessage({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.black,
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 20,
@@ -69,36 +76,41 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   title: {
-    fontSize: 50,
-    fontWeight: 'bold',
-    color: 'black',
+    fontSize: 60,
+    fontWeight: '900',
+    color: colors.white,
+    lineHeight: 60,
   },
   backBtn: {
     width: 50,
     height: 50,
     borderRadius: 10,
-    backgroundColor: 'black',
+    backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center',
   },
   submitBtn: {
     width: '100%',
-    height: 50,
-    borderRadius: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    height: 60,
+    borderRadius: 8,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'black',
+    marginTop: 50,
   },
   submitBtnLabel: {
-    color: 'white',
+    color: colors.black,
     textTransform: 'uppercase',
-    fontWeight: 'bold',
+    fontWeight: "900",
+    fontSize: 20,
   },
   textInput: {
     width: '100%',
     height: 50,
     borderRadius: 10,
-    backgroundColor: '#F6F1F1',
+    backgroundColor: colors.compute('white', 60),
     paddingLeft: 20,
     marginTop: 20,
   },
@@ -106,14 +118,14 @@ const styles = StyleSheet.create({
     marginTop: 30,
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'black',
+    color: colors.white,
   },
   contentInput: {
     width: '100%',
     marginTop: 20,
     minHeight: 200,
     borderRadius: 10,
-    backgroundColor: '#F6F1F1',
+    backgroundColor: colors.compute('white', 60),
     paddingLeft: 20,
   },
 });
