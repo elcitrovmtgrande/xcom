@@ -16,7 +16,8 @@ const contacts = generateContacts(30);
 
 function Chats({ navigation }) {
   const user = useSelector((state: any) => state.user);
-  const { inbox , contacts } = user;
+  const { inbox, contacts } = user;
+  const isEmpty = !inbox || inbox?.length === 0;
 
   const [loading, setLoading] = useState(null);
   // generateMessages(user.seed, 20);
@@ -53,14 +54,14 @@ function Chats({ navigation }) {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} contentContainerStyle={{ paddingBottom: 60 }}>
         <View style={styles.header}>
-          <Text style={styles.title}>Chats</Text>
+          <Text style={styles.title}>Inbox</Text>
           <TouchableOpacity style={styles.newBtn} onPress={onNew}>
             <FontAwesome5 name="telegram-plane" size={24} color={colors.black} />
           </TouchableOpacity>
         </View>
         <View style={{ marginTop: 20 }} />
         {/* <TextInput style={styles.searchInput} placeholder="Search in your chats" /> */}
-        {inbox.map((c) => (
+        {!isEmpty ? inbox.map((c) => (
           <TouchableOpacity
             key={c.with}
             style={styles.contact}
@@ -81,7 +82,15 @@ function Chats({ navigation }) {
               )}
             </View>
           </TouchableOpacity>
-        ))}
+        )) : (
+          <View style={styles.emptyBox}>
+            <Text style={styles.emptyTitle}>Nothing <Text style={{ color: colors.primary }}>yet</Text>.</Text>
+            <Text style={styles.emptySubtitle}>Ask your contacts their public address to chat with.</Text>
+            <TouchableOpacity style={styles.emptyBtn} onPress={() => { }}>
+              <Text style={styles.emptyBtnText}>See my contacts</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -101,6 +110,25 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
   },
+  emptyBox: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'flex-start',
+    justifyContent: 'center'
+  },
+  emptyTitle: {
+    color: colors.white,
+    fontSize: 30,
+    // textTransform: 'uppercase',
+    fontWeight: '900',
+  },
+  emptySubtitle: {
+    color: colors.white,
+    marginTop: 30,
+    fontSize: 20,
+    // fontWeight: '900',
+    // textAlign: 'center',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -108,9 +136,10 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   title: {
-    fontSize: 50,
-    fontWeight: 'bold',
+    fontSize: 60,
+    fontWeight: '900',
     color: colors.white,
+    lineHeight: 60,
   },
   newBtn: {
     width: 50,
@@ -165,6 +194,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingTop: 16,
+  },
+  emptyBtn: {
+    // width: (Dimensions.get('window').width / 2) * 0.8,
+    paddingLeft: 20,
+    paddingRight: 20,
+    height: 60,
+    borderRadius: 8,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 50,
+  },
+  emptyBtnText: {
+    color: colors.black,
+    textTransform: 'uppercase',
+    fontWeight: "900",
+    fontSize: 20,
   },
 });
 
