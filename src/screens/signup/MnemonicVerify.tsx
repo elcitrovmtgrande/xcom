@@ -19,6 +19,9 @@ function MnemonicVerify({ navigation, route }) {
   async function onSessionSave() {
     const seed = seedphrase.join(' ');
     setLoading(true);
+    // Cleaning old content
+    await db.clear();
+    
     if (seed) {
       const keypair = await keypairFromSeed(seed);
       const u = {

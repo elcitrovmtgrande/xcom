@@ -11,6 +11,7 @@ import {
 import { updateUser } from '../store/features/userSlice';
 import { keypairFromSeed } from '../utils/tools';
 import db from '../db';
+import { colors } from '../theme';
 
 function Welcome({ navigation }) {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ function Welcome({ navigation }) {
       {!loading ? (
         <>
           <View style={styles.header}>
-            <Text style={styles.title}>Welcome to your <Text style={{ color: '#00FFA3'}}>private space</Text>.</Text>
+            <Text style={styles.title}>Welcome to your <Text style={{ color: colors.primary }}>private space</Text>.</Text>
             <Text style={styles.subtitle}>
               Start enjoying privacy now. It's 100% anonymous, with no personal data stored. Here, you are really free to talk with people you want to chat with.
             </Text>
@@ -68,7 +69,7 @@ function Welcome({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00052B',
+    backgroundColor: colors.black,
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 20,
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     width: (Dimensions.get('window').width / 2) * 0.8,
     height: 60,
     borderRadius: 8,
-    backgroundColor: '#00FFA3',
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     marginTop: 60,
   },
   btnText: {
-    color: '#00052B',
+    color: colors.black,
     textTransform: 'uppercase',
     fontWeight: "900",
     fontSize: 20,

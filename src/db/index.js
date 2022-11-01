@@ -26,13 +26,13 @@ class Database {
     });
   }
 
-  clear() {
-    this.db.transaction((tx) => {
+  async clear() {
+    await this.db.transaction((tx) => {
       tx.executeSql(
         'DELETE FROM contacts',
       );
     });
-    this.db.transaction((tx) => {
+    await this.db.transaction((tx) => {
       tx.executeSql(
         'DELETE from chats',
       );

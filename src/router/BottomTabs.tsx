@@ -9,6 +9,7 @@ import Identicon from '@polkadot/reactnative-identicon';
 import Inbox from '../screens/Inbox';
 import Settings from '../screens/Settings';
 import Contacts from '../screens/Contacts';
+import { colors } from '../theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,7 +23,7 @@ function BottomTabs() {
         tabBarBackground: () => (
           <BlurView tint="light" intensity={50} style={StyleSheet.absoluteFill} />
         ),
-        tabBarActiveTintColor: 'black',
+        tabBarActiveTintColor: colors.primary,
       }}
       initialRouteName="Inbox"
     >

@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import Identicon from '@polkadot/reactnative-identicon';
 import db from '../db';
 import generateContacts from '../mocks/contacts';
+import { colors } from '../theme';
 // import generateMessages from '../mocks/messages';
 
 const contacts = generateContacts(30);
@@ -34,7 +35,7 @@ function Chats({ navigation }) {
   //   console.log(u8aToHex(decodeAddress(keypair.address)));
   // }
 
-  function recipientName(recipientAddress) {
+  function recipientName(recipientAddress: string) {
     const contact = contacts.find((c) => c.address === recipientAddress);
     const isInContact = !!contact;
     const recipient = isInContact ? contact.nickname : 'X';
@@ -54,7 +55,7 @@ function Chats({ navigation }) {
         <View style={styles.header}>
           <Text style={styles.title}>Chats</Text>
           <TouchableOpacity style={styles.newBtn} onPress={onNew}>
-            <FontAwesome5 name="telegram-plane" size={24} color="white" />
+            <FontAwesome5 name="telegram-plane" size={24} color={colors.black} />
           </TouchableOpacity>
         </View>
         <View style={{ marginTop: 20 }} />
@@ -76,7 +77,7 @@ function Chats({ navigation }) {
               {loading === c.with ? (
                 <ActivityIndicator size="small" color="#666464" />
               ) : (
-                <MaterialIcons name="chevron-right" size={24} color="#666464" />
+                <MaterialIcons name="chevron-right" size={24} color={colors.white} />
               )}
             </View>
           </TouchableOpacity>
@@ -89,7 +90,7 @@ function Chats({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.black,
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 20,
@@ -109,13 +110,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 50,
     fontWeight: 'bold',
-    color: 'black',
+    color: colors.white,
   },
   newBtn: {
     width: 50,
     height: 50,
     borderRadius: 10,
-    backgroundColor: 'black',
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -139,6 +140,7 @@ const styles = StyleSheet.create({
   contactName: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: colors.white,
   },
   contactContent: {
     fontSize: 14,
@@ -150,7 +152,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 4,
     maxWidth: '100%',
-    color: 'black',
+    color: colors.white,
   },
   id: {
     marginLeft: 20,
