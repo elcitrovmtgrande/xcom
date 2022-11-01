@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, ActivityIndicator,
+  View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions,
 } from 'react-native';
+import { SvgXml } from "react-native-svg";
 import * as SecureStore from 'expo-secure-store';
 import { useDispatch } from 'react-redux';
 import {
@@ -34,7 +35,7 @@ function Welcome({ navigation }) {
       setLoading(false);
     }
 
-    session();
+    // session();
   }, []);
 
   return (
@@ -42,44 +43,20 @@ function Welcome({ navigation }) {
       {!loading ? (
         <>
           <View style={styles.header}>
-            <Text style={styles.title}>Xcom</Text>
+            <Text style={styles.title}>Welcome to your <Text style={{ color: '#00FFA3'}}>private space</Text>.</Text>
             <Text style={styles.subtitle}>
-              <Text style={styles.kpi}>0%</Text>
-              {' '}
-              registration.
-            </Text>
-            <Text style={styles.subtitle}>
-              <Text style={styles.kpi}>0%</Text>
-              {' '}
-              tracking.
-            </Text>
-            <Text style={styles.subtitle}>
-              <Text style={styles.kpi}>0%</Text>
-              {' '}
-              spying.
-            </Text>
-            <Text style={styles.subtitle}>
-              <Text style={styles.kpi}>100%</Text>
-              {' '}
-              wolrdwide.
-            </Text>
-            <Text style={styles.subtitle}>
-              <Text style={styles.kpi}>100%</Text>
-              {' '}
-              anonymous.
-            </Text>
-            <Text style={styles.subtitle}>
-              <Text style={styles.kpi}>100%</Text>
-              {' '}
-              privacy.
+              Start enjoying privacy now. It's 100% anonymous, with no personal data stored. Here, you are really free to talk with people you want to chat with.
             </Text>
           </View>
-          <TouchableOpacity style={styles.btnLogin}>
-            <Text style={styles.btnText}>Log in</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnCreate} onPress={() => navigation.navigate('MnemonicGenerate')}>
-            <Text style={styles.btnText}>Create anonymous account</Text>
-          </TouchableOpacity>
+          <View style={styles.buttons}>
+            <TouchableOpacity style={styles.btnLogin}>
+              <Text style={styles.btnText}>Log in</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.btnCreate} onPress={() => navigation.navigate('MnemonicGenerate')}>
+              <Text style={styles.btnText}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
+
         </>
       ) : (
         <ActivityIndicator size="large" color="black" />
@@ -91,7 +68,7 @@ function Welcome({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#00052B',
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 20,
@@ -103,40 +80,48 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 100,
-    fontWeight: 'bold',
+    fontSize: 60,
+    fontWeight: '900',
+    color: 'white',
+    lineHeight: 58,
   },
   subtitle: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'grey',
+    marginTop: 20,
+    fontSize: 20,
+    color: 'white',
+    fontWeight: '700',
   },
   kpi: {
     fontSize: 40,
     color: 'black',
   },
   btnLogin: {
-    width: '100%',
+    width: (Dimensions.get('window').width / 2) * 0.8,
     height: 60,
     borderRadius: 8,
-    backgroundColor: 'black',
-    marginTop: 40,
+    backgroundColor: '#00FFA3',
     alignItems: 'center',
     justifyContent: 'center',
   },
   btnCreate: {
-    width: '100%',
+    width: (Dimensions.get('window').width / 2) * 0.8,
     height: 60,
     borderRadius: 8,
-    backgroundColor: 'grey',
-    marginTop: 20,
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buttons: {
+    width: Dimensions.get('window').width - 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 60,
+  },
   btnText: {
-    color: 'white',
+    color: '#00052B',
     textTransform: 'uppercase',
-    fontWeight: 'bold',
+    fontWeight: "900",
   },
 });
 
