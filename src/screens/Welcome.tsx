@@ -35,7 +35,7 @@ function Welcome({ navigation }) {
       setLoading(false);
     }
 
-    // session();
+    session();
   }, []);
 
   return (
