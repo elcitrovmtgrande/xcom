@@ -26,15 +26,15 @@ function Chat({ route }) {
 
   const flatList = useRef<FlatList>(null);
 
-  useEffect(() => {
-    setTimeout(() => {
-      flatList.current?.scrollToEnd();
-    }, 200);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     flatList.current?.scrollToEnd();
+  //   }, 200);
+  // }, []);
 
-  useEffect(() => {
-      flatList.current?.scrollToEnd();
-  }, [messages]);
+  // useEffect(() => {
+  //     flatList.current?.scrollToEnd();
+  // }, [messages]);
 
   function recipientName(recipientAddress: string) {
     const contact = contacts.find((c: Contact) => c.address === recipientAddress);

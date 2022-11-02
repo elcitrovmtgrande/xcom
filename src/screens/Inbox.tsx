@@ -10,12 +10,13 @@ import Identicon from '@polkadot/reactnative-identicon';
 import db from '../db';
 import generateContacts from '../mocks/contacts';
 import { colors } from '../theme';
-// import generateMessages from '../mocks/messages';
+import generateMessages from '../mocks/messages';
 
 const contacts = generateContacts(30);
 
 function Chats({ navigation }) {
   const user = useSelector((state: any) => state.user);
+  // generateMessages(user.seed, 50);
   const { inbox, contacts } = user;
   const isEmpty = !inbox || inbox?.length === 0;
 
@@ -90,9 +91,9 @@ function Chats({ navigation }) {
           <View style={styles.emptyBox}>
             <Text style={styles.emptyTitle}>Nothing <Text style={{ color: colors.primary }}>yet</Text>.</Text>
             <Text style={styles.emptySubtitle}>Ask your contacts their public address to chat with.</Text>
-            <TouchableOpacity style={styles.emptyBtn} onPress={onContacts}>
+            {/* <TouchableOpacity style={styles.emptyBtn} onPress={onContacts}>
               <Text style={styles.emptyBtnText}>See my contacts</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         )}
       </ScrollView>

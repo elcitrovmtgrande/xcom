@@ -7,13 +7,17 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { colors } from '../theme';
 
 function NewMessage({ navigation, route }) {
-  const initialContact = route?.params?.initialContact || null;
+  const initialContact = route?.params?.contact || null;
 
-  const [nickname, setNickname] = useState('');
+  const [contact, setContact] = useState<object | null>(initialContact);
   const [content, setContent] = useState('');
 
   function onBack() {
     navigation.goBack();
+  }
+
+  function onContactSearch() {
+    navigation.navigate('To');
   }
 
   return (
@@ -27,18 +31,28 @@ function NewMessage({ navigation, route }) {
             </TouchableOpacity>
           </View>
           <Text style={styles.label}>To</Text>
-          <TextInput
+          <TouchableOpacity style={styles.textInput} onPress={onContactSearch}>
+            {initialContact ? (
+              <View style={styles.contact}>
+                <Text style={styles.contactName}>{initialContact.nickname}</Text>
+              </View>
+            ) : (
+              <Text style={styles.nickname}>Search by nickname</Text>
+            )}
+          </TouchableOpacity>
+          {/* <TextInput
             style={styles.textInput}
             placeholder="Search by nickname"
             placeholderTextColor={colors.black}
             value={nickname}
             onChangeText={setNickname} />
-          <Text style={styles.label}>Content</Text>
+          <Text style={styles.label}>Content</Text> */}
           <TextInput
             style={styles.contentInput}
             placeholderTextColor={colors.black}
             placeholder="What does matter today ?"
             value={content}
+            multiline={true}
             onChangeText={setContent}
           />
         </View>
@@ -64,6 +78,19 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingLeft: 20,
     paddingRight: 20,
+  },
+  contact: {
+    padding: 4,
+    borderRadius: 4,
+    backgroundColor: colors.primary,
+    alignSelf: 'flex-start',
+  },
+  contactName: {
+    color: colors.black,
+    fontWeight: 'bold',
+  },
+  nickname: {
+    color: colors.black,
   },
   scrollViewContainer: {
     height: '100%',
@@ -108,6 +135,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: '100%',
+    justifyContent: 'center',
     height: 50,
     borderRadius: 10,
     backgroundColor: colors.compute('white', 60),
@@ -126,7 +154,8 @@ const styles = StyleSheet.create({
     minHeight: 200,
     borderRadius: 10,
     backgroundColor: colors.compute('white', 60),
-    paddingLeft: 20,
+    padding: 20,
+    paddingTop: 20,
   },
 });
 

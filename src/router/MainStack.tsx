@@ -7,6 +7,7 @@ import MnemonicVerify from '../screens/signup/MnemonicVerify';
 import AddContact from '../screens/AddContact';
 import NewMessage from '../screens/NewMessage';
 import Chat from '../screens/Chat';
+import To from '../screens/To';
 
 const Stack = createStackNavigator();
 
@@ -47,6 +48,11 @@ function MainStack() {
         name="NewMessage"
         component={NewMessage}
         options={{ headerShown: false, ...TransitionPresets.ModalSlideFromBottomIOS }}
+      />
+      <Stack.Screen
+        name="To"
+        component={To}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

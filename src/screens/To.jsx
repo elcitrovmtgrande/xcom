@@ -5,68 +5,31 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useActionSheet } from '@expo/react-native-action-sheet';
 import Identicon from '@polkadot/reactnative-identicon';
-import db from '../db';
-import { updateContacts } from '../store/features/userSlice';
 import { colors } from '../theme';
 
-function Contacts({ navigation }) {
-  const contacts = useSelector((state: any) => state.user.contacts);
+function To({ navigation }) {
+  const contacts = useSelector((state) => state.user.contacts);
 
   const [filter, setFilter] = useState('');
 
-  const { showActionSheetWithOptions } = useActionSheet();
   const dispatch = useDispatch();
 
-  function onNew() {
-    navigation.navigate('AddContact');
-  }
-
-  async function deleteContact(contact) {
-    await db.deleteContact(contact);
-    const nextContacts = await db.getContacts();
-    dispatch(updateContacts(nextContacts));
-  }
-
   function onContact(contact) {
-    const options = ['Modify', 'Remove', 'Cancel'];
-    const destructiveButtonIndex = 1;
-    const cancelButtonIndex = 2;
-
-    showActionSheetWithOptions({
-      title: contact.nickname,
-      message: 'What do you want with this contact ?',
-      options,
-      cancelButtonIndex,
-      destructiveButtonIndex,
-    }, (selectedIndex) => {
-      // eslint-disable-next-line default-case
-      switch (selectedIndex) {
-        case 0:
-          // Save
-          navigation.navigate('AddContact', { initialContact: contact });
-          break;
-
-        case destructiveButtonIndex:
-          // Delete
-          deleteContact(contact);
-          break;
-
-        case cancelButtonIndex:
-        // Canceled
-      }
-    });
+    navigation.navigate('NewMessage', { contact });
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView} contentContainerStyle={{ paddingBottom: 60 }}>
+        <TouchableOpacity style={styles.backBtn} onPress={navigation.goBack}>
+          <MaterialIcons name="arrow-back" size={24} color={colors.back} />
+        </TouchableOpacity>
         <View style={styles.header}>
           <Text style={styles.title}>Contacts</Text>
-          <TouchableOpacity style={styles.newBtn} onPress={onNew}>
+          {/* <TouchableOpacity style={styles.newBtn} onPress={onNew}>
             <MaterialIcons name="person-add" size={24} color={colors.black} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <TextInput
           style={styles.searchInput}
@@ -107,11 +70,20 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
   },
+  backBtn: {
+    width: 50,
+    height: 50,
+    borderRadius: 10,
+    marginTop: 20,
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 40,
+    marginTop: 20,
   },
   title: {
     fontSize: 60,
@@ -158,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Contacts;
+export default To;
